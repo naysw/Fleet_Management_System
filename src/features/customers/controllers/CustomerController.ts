@@ -1,7 +1,11 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Query } from '@nestjs/common';
 import { Customer } from '@prisma/client';
 import { JoiValidationPipe } from 'src/pipe/JoiValidationPipe';
 import { ResponseResource } from 'src/resources/ResponseResource';
+import {
+  CreateCustomerBodyInput,
+  createCustomerBodyInputSchema,
+} from '../input/CreateCustomerBodyInput';
 import {
   FindManyCustomerQueryInput,
   findManyCustomerQueryInputSchema,
@@ -45,5 +49,26 @@ export class CustomerController {
     });
 
     return new ResponseResource(customers);
+  }
+
+  /**
+   * create customer
+   *
+   * @param param0 StoreCustomerBodyInput
+   * @returns Promise<ResponseResource<Customer>>
+   */
+  async createCustomer(
+    @Body(new JoiValidationPipe(createCustomerBodyInputSchema))
+    { firstName, lastName, email, phone, address }: CreateCustomerBodyInput,
+  ): Promise<ResponseResource<Customer>> {
+    const customer = await this.customerService.createCustomer({
+      firstName,
+      lastName,
+      email,
+      phone,
+      address,
+    });
+
+    return new ResponseResource(customer);
   }
 }

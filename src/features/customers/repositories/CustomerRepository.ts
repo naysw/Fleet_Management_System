@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { DEFAULT_TAKE, IS_DEV } from 'src/config/constant';
 import { PrismaService } from 'src/services/PrismaService';
 import { includeRelationship, orderByField } from 'src/utils/queryBuilder';
+import { CreateCustomerBodyInput } from '../input/CreateCustomerBodyInput';
 import { FindManyCustomerQueryInput } from '../input/FindManyCustomerQueryInput';
 
 @Injectable()
@@ -35,6 +36,39 @@ export class CustomerRepository {
     } catch (error) {
       throw new InternalServerErrorException(
         IS_DEV ? error : 'findMany customers error',
+      );
+    }
+  }
+
+  /**
+   * create customer
+   *
+   * @param param0 CreateCustomerBodyInput
+   * @returns
+   */
+  async createCustomer({
+    firstName,
+    lastName,
+    email,
+    phone,
+    address,
+  }: CreateCustomerBodyInput) {
+    try {
+      return await this.prismaService.customer.create({
+        data: {
+          firstName,
+          lastName,
+          email,
+          phone,
+          address,
+        },
+        include: {
+          bookings: true,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        IS_DEV ? error : 'create customer error',
       );
     }
   }

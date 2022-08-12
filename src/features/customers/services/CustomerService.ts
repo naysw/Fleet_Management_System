@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Booking, Customer } from '@prisma/client';
+import { CreateCustomerBodyInput } from '../input/CreateCustomerBodyInput';
 import { FindManyCustomerQueryInput } from '../input/FindManyCustomerQueryInput';
 import { CustomerRepository } from '../repositories/CustomerRepository';
 
@@ -32,6 +33,30 @@ export class CustomerService {
     });
 
     return customers.map((customer) => this.customerResource(customer));
+  }
+
+  /**
+   * create customer
+   *
+   * @param param0 CreateCustomerBodyInput
+   * @returns Promise<Customer>
+   */
+  async createCustomer({
+    firstName,
+    lastName,
+    email,
+    phone,
+    address,
+  }: CreateCustomerBodyInput): Promise<any> {
+    const customer = await this.customerRepository.createCustomer({
+      firstName,
+      lastName,
+      email,
+      phone,
+      address,
+    });
+
+    return this.customerResource(customer);
   }
 
   /**
