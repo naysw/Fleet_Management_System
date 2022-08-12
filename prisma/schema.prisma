@@ -10,4 +10,136 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String         @id @default(uuid())
+  name      String
+  username  String         @unique
+  password  String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @default(now())
+  roles     UsersOnRoles[]
+}
 
+model Customer {
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  phone     String?
+  email     String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  bookings Booking[]
+}
+
+model Service {
+  id          String  @id @default(uuid())
+  name        String
+  price       Int
+  description String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  bookings ServicesOnBooking[]
+}
+
+model Booking {
+  id         String   @id @default(uuid())
+  carNumber  String
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+  from       String
+  to         String?
+  notes      String   @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+
+  services ServicesOnBooking[]
+  invoices Invoice[]
+}
+
+model ServicesOnBooking {
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@id([bookingId, serviceId])
+}
+
+model Invoice {
+  id     String @id @default(uuid())
+  amount Int
+  status String @default("PENDING")
+
+  bookingId        String
+  booking          Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customProperties Json?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now())
+}
+
+model ActivityLog {
+  id          String   @id @default(uuid())
+  logName     String?
+  description String   @db.Text
+  subjectId   String?
+  subjectType String?
+  causerId    String?
+  causerType  String?
+  properties  Json?
+  event       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+}
+
+model Role {
+  id   String @id @default(uuid())
+  name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  permissions RolesOnPermissons[]
+  users       UsersOnRoles[]
+}
+
+model Permission {
+  id   String @id @default(uuid())
+  name String
+
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @default(now())
+  roles     RolesOnPermissons[]
+}
+
+model RolesOnPermissons {
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  roleId       String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  permissionId String
+
+  @@id([roleId, permissionId])
+}
+
+model UsersOnRoles {
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
+  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  roleId String
+
+  @@id([userId, roleId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  type      String
+  status    String   @default("IDLE")
+  data      Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
