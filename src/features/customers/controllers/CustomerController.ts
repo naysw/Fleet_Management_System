@@ -10,6 +10,10 @@ import {
   FindManyCustomerQueryInput,
   findManyCustomerQueryInputSchema,
 } from '../input/FindManyCustomerQueryInput';
+import {
+  FindOneCustomerQueryInput,
+  findOneCustomerQueryInputSchema,
+} from '../input/FindOneCustomerQueryInput';
 import { CustomerService } from '../services/CustomerService';
 
 @Controller({
@@ -61,16 +65,22 @@ export class CustomerController {
   async createCustomer(
     @Body(new JoiValidationPipe(createCustomerBodyInputSchema))
     { firstName, lastName, email, phone, address }: CreateCustomerBodyInput,
+    @Query(new JoiValidationPipe(findOneCustomerQueryInputSchema))
+    { include }: FindOneCustomerQueryInput,
   ): Promise<ResponseResource<Customer>> {
+    console.log(include);
     await this.customerService.isCustomerExists(email);
 
-    const customer = await this.customerService.createCustomer({
-      firstName,
-      lastName,
-      email,
-      phone,
-      address,
-    });
+    const customer = await this.customerService.createCustomer(
+      {
+        firstName,
+        lastName,
+        email,
+        phone,
+        address,
+      },
+      { include },
+    );
 
     return new ResponseResource(customer);
   }

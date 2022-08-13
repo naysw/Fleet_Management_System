@@ -2,6 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { Booking, Customer } from '@prisma/client';
 import { CreateCustomerBodyInput } from '../input/CreateCustomerBodyInput';
 import { FindManyCustomerQueryInput } from '../input/FindManyCustomerQueryInput';
+import { FindOneCustomerQueryInput } from '../input/FindOneCustomerQueryInput';
 import { CustomerRepository } from '../repositories/CustomerRepository';
 
 @Injectable()
@@ -41,20 +42,20 @@ export class CustomerService {
    * @param param0 CreateCustomerBodyInput
    * @returns Promise<Customer>
    */
-  async createCustomer({
-    firstName,
-    lastName,
-    email,
-    phone,
-    address,
-  }: CreateCustomerBodyInput): Promise<any> {
-    const customer = await this.customerRepository.createCustomer({
-      firstName,
-      lastName,
-      email,
-      phone,
-      address,
-    });
+  async createCustomer(
+    { firstName, lastName, email, phone, address }: CreateCustomerBodyInput,
+    { include }: FindOneCustomerQueryInput,
+  ): Promise<any> {
+    const customer = await this.customerRepository.createCustomer(
+      {
+        firstName,
+        lastName,
+        email,
+        phone,
+        address,
+      },
+      { include },
+    );
 
     return this.customerResource(customer);
   }

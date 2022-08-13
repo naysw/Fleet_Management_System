@@ -4,6 +4,7 @@ import { PrismaService } from 'src/services/PrismaService';
 import { includeRelationship, orderByField } from 'src/utils/queryBuilder';
 import { CreateCustomerBodyInput } from '../input/CreateCustomerBodyInput';
 import { FindManyCustomerQueryInput } from '../input/FindManyCustomerQueryInput';
+import { FindOneCustomerQueryInput } from '../input/FindOneCustomerQueryInput';
 
 @Injectable()
 export class CustomerRepository {
@@ -46,13 +47,10 @@ export class CustomerRepository {
    * @param param0 CreateCustomerBodyInput
    * @returns
    */
-  async createCustomer({
-    firstName,
-    lastName,
-    email,
-    phone,
-    address,
-  }: CreateCustomerBodyInput) {
+  async createCustomer(
+    { firstName, lastName, email, phone, address }: CreateCustomerBodyInput,
+    { include }: FindOneCustomerQueryInput,
+  ) {
     try {
       return await this.prismaService.customer.create({
         data: {
@@ -63,7 +61,7 @@ export class CustomerRepository {
           address,
         },
         include: {
-          bookings: true,
+          bookings: includeRelationship(include, 'bookings'),
         },
       });
     } catch (error) {
