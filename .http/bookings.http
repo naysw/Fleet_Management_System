@@ -1,0 +1,43 @@
+@BASE_URL=http://localhost:3002
+@API_VERSION=v1
+
+### find many bookings
+GET {{BASE_URL}}/{{API_VERSION}}/api/bookings
+    ?take=5&skip=0&include=services,customer&orderBy=createdAt
+content-type: application/json
+
+
+### Create a new booking
+POST {{BASE_URL}}/{{API_VERSION}}/api/bookings
+    ?include=services,customer    
+content-type: application/json
+
+{
+    "carNumber": "7A/5678",
+    "customerId": "76d038e4-698a-4a92-bf78-d04d5add6bec",
+    "from": "2022-07-13T17:58:37.493Z",
+    "to": "2022-08-13T17:58:37.493Z",
+    "notes": "Do not forget to bring your keys",
+    "serviceIds": [
+        "76d038e4-698a-4a92-bf78-d04d5add6bec"
+    ]
+}
+
+
+
+### update customer from given id
+PATCH {{BASE_URL}}/{{API_VERSION}}/api/bookings/76d038e4-698a-4a92-bf78-d04d5add6bec
+    ?include=bookings    
+content-type: application/json
+
+{
+    "firstName": "John Update",
+    "lastName": "Doe Update",
+    "phone": "123456789444",
+    "address": "123 Main St"
+}
+
+
+### delete customer from given id
+DELETE  {{BASE_URL}}/{{API_VERSION}}/api/bookings/f202a506-f91b-4e1b-bf77-88fad711e96d  
+content-type: application/json

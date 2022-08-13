@@ -3,7 +3,7 @@
 
 ### find many customers
 GET {{BASE_URL}}/{{API_VERSION}}/api/customers
-    ?take=1&skip=0&include=bookings&orderBy=createdAt
+    ?take=5&skip=0&include=bookings&orderBy=createdAt
 content-type: application/json
 
 
