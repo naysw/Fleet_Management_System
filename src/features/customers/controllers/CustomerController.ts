@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { Customer } from '@prisma/client';
 import { JoiValidationPipe } from 'src/pipe/JoiValidationPipe';
 import { ResponseResource } from 'src/resources/ResponseResource';
@@ -57,6 +57,7 @@ export class CustomerController {
    * @param param0 StoreCustomerBodyInput
    * @returns Promise<ResponseResource<Customer>>
    */
+  @Post()
   async createCustomer(
     @Body(new JoiValidationPipe(createCustomerBodyInputSchema))
     { firstName, lastName, email, phone, address }: CreateCustomerBodyInput,
