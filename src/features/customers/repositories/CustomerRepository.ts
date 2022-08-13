@@ -145,4 +145,24 @@ export class CustomerRepository {
       );
     }
   }
+
+  /**
+   * delete customer by id
+   *
+   * @param id string
+   * @returns
+   */
+  async deleteCustomer(id: string) {
+    try {
+      return await this.prismaService.customer.delete({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        IS_DEV ? error : 'delete customer error',
+      );
+    }
+  }
 }

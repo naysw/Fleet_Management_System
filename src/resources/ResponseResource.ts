@@ -1,4 +1,4 @@
-export class ResponseResource<TData> {
+export class ResponseResource<TData = unknown> {
   private message = 'Ok';
   private statusCode = 200;
   private success = true;

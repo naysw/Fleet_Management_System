@@ -120,6 +120,15 @@ export class CustomerService {
   }
 
   /**
+   * delete customer from given id
+   *
+   * @param id string
+   */
+  async deleteCustomer(id: string): Promise<void> {
+    await this.customerRepository.deleteCustomer(id);
+  }
+
+  /**
    * map customer data
    *
    * @param customer Customer

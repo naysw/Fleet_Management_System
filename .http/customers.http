@@ -34,3 +34,8 @@ content-type: application/json
     "phone": "123456789444",
     "address": "123 Main St"
 }
+
+
+### delete customer from given id
+DELETE  {{BASE_URL}}/{{API_VERSION}}/api/customers/f202a506-f91b-4e1b-bf77-88fad711e96d  
+content-type: application/json

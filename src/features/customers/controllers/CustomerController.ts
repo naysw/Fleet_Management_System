@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -94,7 +96,7 @@ export class CustomerController {
       { include },
     );
 
-    return new ResponseResource(customer);
+    return new ResponseResource(customer).setMessage('new customer created');
   }
 
   /**
@@ -105,7 +107,7 @@ export class CustomerController {
    */
   @Patch(':id')
   async updateCustomer(
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe()) id: string,
     @Body(new JoiValidationPipe(updateCustomerBodyInputSchema))
     { firstName, lastName, email, phone, address }: UpdateCustomerBodyInput,
     @Query(new JoiValidationPipe(findOneCustomerQueryInputSchema))
@@ -119,6 +121,23 @@ export class CustomerController {
       { include },
     );
 
-    return new ResponseResource(customer);
+    return new ResponseResource(customer).setMessage('customer updated');
+  }
+
+  /**
+   * delete customer from given id
+   *
+   * @param id string
+   * @returns
+   */
+  @Delete(':id')
+  async deleteCustomer(
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ): Promise<ResponseResource<any>> {
+    await this.customerService.findOrFailById(id);
+
+    await this.customerService.deleteCustomer(id);
+
+    return new ResponseResource(null).setMessage(`customer with ${id} deleted`);
   }
 }
