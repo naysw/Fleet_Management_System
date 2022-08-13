@@ -5,6 +5,7 @@ import { includeRelationship, orderByField } from 'src/utils/queryBuilder';
 import { CreateCustomerBodyInput } from '../input/CreateCustomerBodyInput';
 import { FindManyCustomerQueryInput } from '../input/FindManyCustomerQueryInput';
 import { FindOneCustomerQueryInput } from '../input/FindOneCustomerQueryInput';
+import { UpdateCustomerBodyInput } from '../input/UpdateCustomerBodyInput';
 
 @Injectable()
 export class CustomerRepository {
@@ -87,6 +88,60 @@ export class CustomerRepository {
     } catch (error) {
       throw new InternalServerErrorException(
         IS_DEV ? error : 'findOrFailByEmail error',
+      );
+    }
+  }
+
+  /**
+   * find customer by id
+   *
+   * @param id string
+   * @returns
+   */
+  async findById(id: string) {
+    try {
+      return await this.prismaService.customer.findUnique({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(IS_DEV ? error : 'findById error');
+    }
+  }
+
+  /**
+   * update customer by id
+   *
+   * @param id string
+   * @param param1 UpdateCustomerBodyInput
+   * @param param2 FindOneCustomerQueryInput
+   * @returns Promise<Customer>
+   */
+  async updateCustomer(
+    id: string,
+    { firstName, lastName, email, phone, address }: UpdateCustomerBodyInput,
+    { include }: FindOneCustomerQueryInput,
+  ) {
+    try {
+      return await this.prismaService.customer.update({
+        where: {
+          id,
+        },
+        data: {
+          firstName,
+          lastName,
+          email,
+          phone,
+          address,
+        },
+        include: {
+          bookings: includeRelationship(include, 'bookings'),
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        IS_DEV ? error : 'update customer error',
       );
     }
   }

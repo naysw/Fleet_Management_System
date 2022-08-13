@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { Customer } from '@prisma/client';
 import { JoiValidationPipe } from 'src/pipe/JoiValidationPipe';
 import { ResponseResource } from 'src/resources/ResponseResource';
@@ -14,6 +22,10 @@ import {
   FindOneCustomerQueryInput,
   findOneCustomerQueryInputSchema,
 } from '../input/FindOneCustomerQueryInput';
+import {
+  UpdateCustomerBodyInput,
+  updateCustomerBodyInputSchema,
+} from '../input/UpdateCustomerBodyInput';
 import { CustomerService } from '../services/CustomerService';
 
 @Controller({
@@ -69,7 +81,7 @@ export class CustomerController {
     { include }: FindOneCustomerQueryInput,
   ): Promise<ResponseResource<Customer>> {
     console.log(include);
-    await this.customerService.isCustomerExists(email);
+    await this.customerService.customerExistsWithEmail(email);
 
     const customer = await this.customerService.createCustomer(
       {
@@ -79,6 +91,31 @@ export class CustomerController {
         phone,
         address,
       },
+      { include },
+    );
+
+    return new ResponseResource(customer);
+  }
+
+  /**
+   * update customer from given id
+   *
+   * @param id string
+   * @param param1 UpdaeCustomerBodyInput
+   */
+  @Patch(':id')
+  async updateCustomer(
+    @Param('id') id: string,
+    @Body(new JoiValidationPipe(updateCustomerBodyInputSchema))
+    { firstName, lastName, email, phone, address }: UpdateCustomerBodyInput,
+    @Query(new JoiValidationPipe(findOneCustomerQueryInputSchema))
+    { include }: FindOneCustomerQueryInput,
+  ): Promise<ResponseResource<any>> {
+    await this.customerService.findOrFailById(id);
+
+    const customer = await this.customerService.updateCustomer(
+      id,
+      { firstName, lastName, email, phone, address },
       { include },
     );
 

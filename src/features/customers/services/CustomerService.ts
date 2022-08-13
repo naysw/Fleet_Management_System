@@ -1,8 +1,13 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Booking, Customer } from '@prisma/client';
 import { CreateCustomerBodyInput } from '../input/CreateCustomerBodyInput';
 import { FindManyCustomerQueryInput } from '../input/FindManyCustomerQueryInput';
 import { FindOneCustomerQueryInput } from '../input/FindOneCustomerQueryInput';
+import { UpdateCustomerBodyInput } from '../input/UpdateCustomerBodyInput';
 import { CustomerRepository } from '../repositories/CustomerRepository';
 
 @Injectable()
@@ -66,7 +71,7 @@ export class CustomerService {
    * @param email string
    * @returns
    */
-  async isCustomerExists(email: string) {
+  async customerExistsWithEmail(email: string) {
     const customer = await this.customerRepository.isCustomerExists(email);
 
     if (customer)
@@ -75,6 +80,43 @@ export class CustomerService {
       );
 
     return customer;
+  }
+
+  /**
+   * find or fail by id
+   *
+   * @param id string
+   * @returns
+   */
+  async findOrFailById(id: string) {
+    const customer = await this.customerRepository.findById(id);
+
+    if (!customer)
+      throw new NotFoundException(`customer with id ${id} not found`);
+
+    return customer;
+  }
+
+  /**
+   * update customer from given id
+   *
+   * @param id string
+   * @param param1 UpdateCustomerBodyInput
+   * @param param2 FindOneCustomerQueryInput
+   * @returns Promise<Customer>
+   */
+  async updateCustomer(
+    id: string,
+    { firstName, lastName, email, phone, address }: UpdateCustomerBodyInput,
+    { include }: FindOneCustomerQueryInput,
+  ) {
+    const customer = await this.customerRepository.updateCustomer(
+      id,
+      { firstName, lastName, email, phone, address },
+      { include },
+    );
+
+    return this.customerResource(customer);
   }
 
   /**
