@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { DEFAULT_TAKE, IS_DEV } from 'src/config/constant';
+import { DEFAULT_TAKE, IS_DEV } from 'src/config/constants';
 import { PrismaService } from 'src/services/PrismaService';
 import { includeRelationship, orderByField } from 'src/utils/queryBuilder';
 import { CreateCustomerBodyInput } from '../input/CreateCustomerBodyInput';
