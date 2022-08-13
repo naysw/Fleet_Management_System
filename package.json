@@ -21,6 +21,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "start:docker": "npx prisma migrate deploy && NODE_ENV=production node dist/main"
   },
+  "prisma": {
+    "seed": "ts-node src/database/seeds/index.ts"
+  },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
@@ -47,6 +50,7 @@
     "slugify": "^1.6.5"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.4.0",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
