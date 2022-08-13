@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { Booking, Customer } from '@prisma/client';
 import { CreateCustomerBodyInput } from '../input/CreateCustomerBodyInput';
 import { FindManyCustomerQueryInput } from '../input/FindManyCustomerQueryInput';
@@ -57,6 +57,23 @@ export class CustomerService {
     });
 
     return this.customerResource(customer);
+  }
+
+  /**
+   * check customer exists with given email
+   *
+   * @param email string
+   * @returns
+   */
+  async isCustomerExists(email: string) {
+    const customer = await this.customerRepository.isCustomerExists(email);
+
+    if (customer)
+      throw new ConflictException(
+        `customer with email ${email} already exists`,
+      );
+
+    return customer;
   }
 
   /**

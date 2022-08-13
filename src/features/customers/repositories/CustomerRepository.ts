@@ -72,4 +72,24 @@ export class CustomerRepository {
       );
     }
   }
+
+  /**
+   * find customer by email
+   *
+   * @param email string
+   * @returns
+   */
+  async isCustomerExists(email: string) {
+    try {
+      return await this.prismaService.customer.findUnique({
+        where: {
+          email,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        IS_DEV ? error : 'findOrFailByEmail error',
+      );
+    }
+  }
 }

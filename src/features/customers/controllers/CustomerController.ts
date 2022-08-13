@@ -62,6 +62,8 @@ export class CustomerController {
     @Body(new JoiValidationPipe(createCustomerBodyInputSchema))
     { firstName, lastName, email, phone, address }: CreateCustomerBodyInput,
   ): Promise<ResponseResource<Customer>> {
+    await this.customerService.isCustomerExists(email);
+
     const customer = await this.customerService.createCustomer({
       firstName,
       lastName,
