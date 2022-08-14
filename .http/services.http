@@ -20,16 +20,15 @@ content-type: application/json
 
 
 
-### update customer from given id
-PATCH {{BASE_URL}}/{{API_VERSION}}/api/services/76d038e4-698a-4a92-bf78-d04d5add6bec
+### update service from given id
+PATCH {{BASE_URL}}/{{API_VERSION}}/api/services/c9642146-556a-4133-8756-20d04c1e313e
     ?include=bookings    
 content-type: application/json
 
 {
-    "firstName": "John Update",
-    "lastName": "Doe Update",
-    "phone": "123456789444",
-    "address": "123 Main St"
+    "name": "New Service Update",
+    "price": 4550,
+    "description": "New Service Description Update"    
 }
 
 

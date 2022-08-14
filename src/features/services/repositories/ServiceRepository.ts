@@ -5,6 +5,7 @@ import { PrismaService } from 'src/services/PrismaService';
 import { registerInclude, registerOrderBy } from 'src/utils/queryBuilder';
 import { CreateServiceBodyInput } from '../input/CreateServiceBodyInput';
 import { FindManyServiceQueryInput } from '../input/FindManyServiceQueryInput';
+import { UpdateServiceBodyInput } from '../input/UpdateServiceBodyInput';
 
 @Injectable()
 export class ServiceRepository {
@@ -35,6 +36,20 @@ export class ServiceRepository {
     }
   }
 
+  async findById(id: string) {
+    try {
+      return await this.prismaService.service.findUnique({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        IS_DEV ? error : 'findById service error',
+      );
+    }
+  }
+
   async createService({ name, price, description }: CreateServiceBodyInput) {
     try {
       return await this.prismaService.service.create({
@@ -47,6 +62,28 @@ export class ServiceRepository {
     } catch (error) {
       throw new InternalServerErrorException(
         IS_DEV ? error : 'create service error',
+      );
+    }
+  }
+
+  async updateService(
+    id: string,
+    { name, price, description }: UpdateServiceBodyInput,
+  ) {
+    try {
+      return await this.prismaService.service.update({
+        where: {
+          id,
+        },
+        data: {
+          name,
+          price,
+          description,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        IS_DEV ? error : 'update service error',
       );
     }
   }

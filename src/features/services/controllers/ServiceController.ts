@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { Service } from '@prisma/client';
 import { findManyServiceQueryInputSchema } from 'src/features/customers/input/FindManyCustomerQueryInput';
 import { JoiValidationPipe } from 'src/pipe/JoiValidationPipe';
@@ -8,6 +17,10 @@ import {
   createServiceBodyInputSchema,
 } from '../input/CreateServiceBodyInput';
 import { FindManyServiceQueryInput } from '../input/FindManyServiceQueryInput';
+import {
+  UpdateServiceBodyInput,
+  updateServiceBodyInputSchema,
+} from '../input/UpdateServiceBodyInput';
 import { ServiceService } from '../services/ServiceService';
 
 @Controller({
@@ -49,6 +62,23 @@ export class ServiceController {
     { name, price, description }: CreateServiceBodyInput,
   ): Promise<ResponseResource<Service>> {
     const service = await this.serviceService.createService({
+      name,
+      price,
+      description,
+    });
+
+    return new ResponseResource(service);
+  }
+
+  @Patch(':id')
+  async updateService(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body(new JoiValidationPipe(updateServiceBodyInputSchema))
+    { name, price, description }: UpdateServiceBodyInput,
+  ): Promise<ResponseResource<Service>> {
+    await this.serviceService.findOrFailById(id);
+
+    const service = await this.serviceService.updateService(id, {
       name,
       price,
       description,
