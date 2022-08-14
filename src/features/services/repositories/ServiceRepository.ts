@@ -87,4 +87,18 @@ export class ServiceRepository {
       );
     }
   }
+
+  async deleteService(id: string) {
+    try {
+      return await this.prismaService.service.delete({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        IS_DEV ? error : `Error deleting service with id ${id}`,
+      );
+    }
+  }
 }

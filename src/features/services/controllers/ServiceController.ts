@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -67,7 +68,9 @@ export class ServiceController {
       description,
     });
 
-    return new ResponseResource(service);
+    return new ResponseResource(service).setMessage(
+      `new service created successfully`,
+    );
   }
 
   @Patch(':id')
@@ -84,6 +87,25 @@ export class ServiceController {
       description,
     });
 
-    return new ResponseResource(service);
+    return new ResponseResource(service).setMessage(
+      `service with ${id} updated`,
+    );
+  }
+
+  /**
+   * delete service from given id
+   *
+   * @param id string
+   * @returns
+   */
+  @Delete(':id')
+  async deleteService(
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ): Promise<ResponseResource<any>> {
+    await this.serviceService.findOrFailById(id);
+
+    await this.serviceService.deleteService(id);
+
+    return new ResponseResource(null).setMessage(`service with ${id} deleted`);
   }
 }

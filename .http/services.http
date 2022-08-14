@@ -32,6 +32,6 @@ content-type: application/json
 }
 
 
-### delete customer from given id
-DELETE  {{BASE_URL}}/{{API_VERSION}}/api/services/f202a506-f91b-4e1b-bf77-88fad711e96d  
+### delete service from given id
+DELETE  {{BASE_URL}}/{{API_VERSION}}/api/services/c9642146-556a-4133-8756-20d04c1e313e
 content-type: application/json

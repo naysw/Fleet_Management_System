@@ -68,4 +68,8 @@ export class ServiceService {
 
     return this.serviceResource(service);
   }
+
+  async deleteService(id: string) {
+    await this.serviceRepository.deleteService(id);
+  }
 }
