@@ -66,7 +66,7 @@ export class BookingController {
         from,
         to,
         notes,
-        serviceIds,
+        serviceIds: this.bookingService.getServiceIds(serviceIds),
       },
       { include },
     );

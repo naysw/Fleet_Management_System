@@ -22,7 +22,8 @@ content-type: application/json
     "notes": "Do not forget to bring your keys",
     "serviceIds": [
         // basic service id
-        "e9ca5647-fb16-46e8-b23f-ff63be5a6351"
+        "b7e8ba53-96d7-43e9-8090-87108d1e72ec",
+        "a0c8f602-a278-489a-ad3d-1b3b4112cbdd"
     ]
 }
 
