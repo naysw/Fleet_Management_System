@@ -10,7 +10,10 @@ import {
   Post,
   Query,
   Req,
+  UseGuards,
 } from "@nestjs/common";
+import { AdminGuard } from "src/features/auth/guards/AdminGuard";
+import { JwtAuthGuard } from "src/features/auth/guards/JwtAuthGuard";
 import { RoleService } from "src/features/roles/services/RoleService";
 import { JoiValidationPipe } from "src/pipe/JoiValidationPipe";
 import { ResponseResource } from "src/resources/ResponseResource";
@@ -37,6 +40,7 @@ import { UserService } from "../services/UserService";
   path: "/api/users",
   version: "1",
 })
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -70,6 +74,7 @@ export class UserController {
   }
 
   @Post()
+  @UseGuards(AdminGuard)
   async create(
     @Body(new JoiValidationPipe(createUserInputSchema))
     {
@@ -134,7 +139,7 @@ export class UserController {
    * @returns
    */
   @Patch(":id")
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(AdminGuard)
   async update(
     @Param("id", new ParseUUIDPipe()) id: string,
     @Body(new JoiValidationPipe(updateUserInputSchema))
@@ -162,7 +167,7 @@ export class UserController {
    * @return
    */
   @Delete(":id")
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(AdminGuard)
   async delete(@Param("id", new ParseUUIDPipe()) id: string) {
     await this.userService.findByIdOrFail(id);
     await this.userService.deleteById(id);

@@ -8,8 +8,10 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from "@nestjs/common";
 import { Vehicle } from "@prisma/client";
+import { JwtAuthGuard } from "src/features/auth/guards/JwtAuthGuard";
 import { CustomerService } from "src/features/customers/services/CustomerService";
 import { JoiValidationPipe } from "src/pipe/JoiValidationPipe";
 import { ResponseResource } from "src/resources/ResponseResource";
@@ -35,6 +37,7 @@ import { VehicleService } from "../services/VehicleService";
   path: "api/vehicles",
   version: "1",
 })
+@UseGuards(JwtAuthGuard)
 export class VehicleController {
   constructor(
     private readonly vehicleService: VehicleService,

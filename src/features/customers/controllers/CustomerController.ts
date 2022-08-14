@@ -8,32 +8,35 @@ import {
   Patch,
   Post,
   Query,
-} from '@nestjs/common';
-import { Customer } from '@prisma/client';
-import { JoiValidationPipe } from 'src/pipe/JoiValidationPipe';
-import { ResponseResource } from 'src/resources/ResponseResource';
+  UseGuards,
+} from "@nestjs/common";
+import { Customer } from "@prisma/client";
+import { JwtAuthGuard } from "src/features/auth/guards/JwtAuthGuard";
+import { JoiValidationPipe } from "src/pipe/JoiValidationPipe";
+import { ResponseResource } from "src/resources/ResponseResource";
 import {
   CreateCustomerBodyInput,
   createCustomerBodyInputSchema,
-} from '../input/CreateCustomerBodyInput';
+} from "../input/CreateCustomerBodyInput";
 import {
   FindManyCustomerQueryInput,
   findManyServiceQueryInputSchema,
-} from '../input/FindManyCustomerQueryInput';
+} from "../input/FindManyCustomerQueryInput";
 import {
   FindOneCustomerQueryInput,
   findOneCustomerQueryInputSchema,
-} from '../input/FindOneCustomerQueryInput';
+} from "../input/FindOneCustomerQueryInput";
 import {
   UpdateCustomerBodyInput,
   updateCustomerBodyInputSchema,
-} from '../input/UpdateCustomerBodyInput';
-import { CustomerService } from '../services/CustomerService';
+} from "../input/UpdateCustomerBodyInput";
+import { CustomerService } from "../services/CustomerService";
 
 @Controller({
-  path: 'api/customers',
-  version: '1',
+  path: "api/customers",
+  version: "1",
 })
+@UseGuards(JwtAuthGuard)
 export class CustomerController {
   constructor(private customerService: CustomerService) {}
 
@@ -96,7 +99,7 @@ export class CustomerController {
       { include },
     );
 
-    return new ResponseResource(customer).setMessage('new customer created');
+    return new ResponseResource(customer).setMessage("new customer created");
   }
 
   /**
@@ -105,9 +108,9 @@ export class CustomerController {
    * @param id string
    * @param param1 UpdaeCustomerBodyInput
    */
-  @Patch(':id')
+  @Patch(":id")
   async updateCustomer(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param("id", new ParseUUIDPipe()) id: string,
     @Body(new JoiValidationPipe(updateCustomerBodyInputSchema))
     { firstName, lastName, email, phone, address }: UpdateCustomerBodyInput,
     @Query(new JoiValidationPipe(findOneCustomerQueryInputSchema))
@@ -121,7 +124,7 @@ export class CustomerController {
       { include },
     );
 
-    return new ResponseResource(customer).setMessage('customer updated');
+    return new ResponseResource(customer).setMessage("customer updated");
   }
 
   /**
@@ -130,9 +133,9 @@ export class CustomerController {
    * @param id string
    * @returns
    */
-  @Delete(':id')
+  @Delete(":id")
   async deleteCustomer(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param("id", new ParseUUIDPipe()) id: string,
   ): Promise<ResponseResource<any>> {
     await this.customerService.findOrFailById(id);
 

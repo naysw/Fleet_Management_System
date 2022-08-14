@@ -49,12 +49,12 @@ export class UserService {
    * @param id: string
    */
   async findById(id: string) {
-    const user = await this.userRepository.findUnique({ id });
+    const user = await this.userRepository.findUnique(
+      { id },
+      { include: "roles" },
+    );
 
-    return {
-      ...user,
-      roles: user.roles.map((role) => role.role),
-    };
+    return this.userResource(user);
   }
 
   /**
@@ -64,7 +64,10 @@ export class UserService {
    * @returns Promise<User>
    */
   async findByUsername(username: string): Promise<User> {
-    return await this.userRepository.findUnique({ username });
+    return await this.userRepository.findUnique(
+      { username },
+      { include: "roles" },
+    );
   }
 
   /**
@@ -73,15 +76,18 @@ export class UserService {
    * @param id string
    * @returns Promise<User>
    */
-  async findByIdOrFail(id: string): Promise<User> {
-    const user = await this.userRepository.findUnique({ id });
+  async findByIdOrFail(id: string): Promise<any> {
+    const user = await this.userRepository.findUnique(
+      { id },
+      { include: "roles" },
+    );
 
     if (!user)
       throw new NotFoundException(
         `User not found with id ${JSON.stringify(id)}`,
       );
 
-    return user;
+    return this.userResource(user);
   }
 
   /**
@@ -129,7 +135,7 @@ export class UserService {
     { include }: FindOneUserQueryInput,
   ) {
     if (email) {
-      const emailExists = await this.userRepository.findUnique({ email });
+      const emailExists = await this.userRepository.findUnique({ email }, {});
 
       if (emailExists)
         throw new ConflictException(`email already exits ${email}`);

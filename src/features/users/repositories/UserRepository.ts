@@ -65,14 +65,17 @@ export class UserRepository {
    * @param input
    * @returns
    */
-  async findUnique(input: Prisma.UserWhereUniqueInput) {
+  async findUnique(
+    input: Prisma.UserWhereUniqueInput,
+    { include }: FindOneUserQueryInput,
+  ) {
     try {
       return await this.prismaService.user.findUnique({
         where: input,
         include: {
-          roles: {
-            include: { role: true },
-          },
+          roles: registerInclude(include, "roles")
+            ? { select: { role: true } }
+            : false,
         },
       });
     } catch (error) {

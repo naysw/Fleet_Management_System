@@ -1,1 +1,1 @@
-export const ACCESS_TOKEN_SECRET = "i am a secret";
+export const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;

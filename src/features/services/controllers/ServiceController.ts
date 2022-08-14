@@ -8,26 +8,29 @@ import {
   Patch,
   Post,
   Query,
-} from '@nestjs/common';
-import { Service } from '@prisma/client';
-import { findManyServiceQueryInputSchema } from 'src/features/customers/input/FindManyCustomerQueryInput';
-import { JoiValidationPipe } from 'src/pipe/JoiValidationPipe';
-import { ResponseResource } from 'src/resources/ResponseResource';
+  UseGuards,
+} from "@nestjs/common";
+import { Service } from "@prisma/client";
+import { JwtAuthGuard } from "src/features/auth/guards/JwtAuthGuard";
+import { findManyServiceQueryInputSchema } from "src/features/customers/input/FindManyCustomerQueryInput";
+import { JoiValidationPipe } from "src/pipe/JoiValidationPipe";
+import { ResponseResource } from "src/resources/ResponseResource";
 import {
   CreateServiceBodyInput,
   createServiceBodyInputSchema,
-} from '../input/CreateServiceBodyInput';
-import { FindManyServiceQueryInput } from '../input/FindManyServiceQueryInput';
+} from "../input/CreateServiceBodyInput";
+import { FindManyServiceQueryInput } from "../input/FindManyServiceQueryInput";
 import {
   UpdateServiceBodyInput,
   updateServiceBodyInputSchema,
-} from '../input/UpdateServiceBodyInput';
-import { ServiceService } from '../services/ServiceService';
+} from "../input/UpdateServiceBodyInput";
+import { ServiceService } from "../services/ServiceService";
 
 @Controller({
-  path: 'api/services',
-  version: '1',
+  path: "api/services",
+  version: "1",
 })
+@UseGuards(JwtAuthGuard)
 export class ServiceController {
   constructor(private readonly serviceService: ServiceService) {}
 
@@ -73,9 +76,9 @@ export class ServiceController {
     );
   }
 
-  @Patch(':id')
+  @Patch(":id")
   async updateService(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param("id", new ParseUUIDPipe()) id: string,
     @Body(new JoiValidationPipe(updateServiceBodyInputSchema))
     { name, price, description }: UpdateServiceBodyInput,
   ): Promise<ResponseResource<Service>> {
@@ -98,9 +101,9 @@ export class ServiceController {
    * @param id string
    * @returns
    */
-  @Delete(':id')
+  @Delete(":id")
   async deleteService(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param("id", new ParseUUIDPipe()) id: string,
   ): Promise<ResponseResource<any>> {
     await this.serviceService.findOrFailById(id);
 

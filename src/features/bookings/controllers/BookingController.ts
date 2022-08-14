@@ -1,4 +1,13 @@
-import { Body, Controller, Get, HttpStatus, Post, Query } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Post,
+  Query,
+  UseGuards,
+} from "@nestjs/common";
+import { JwtAuthGuard } from "src/features/auth/guards/JwtAuthGuard";
 import { CustomerService } from "src/features/customers/services/CustomerService";
 import { ServiceService } from "src/features/services/services/ServiceService";
 import { VehicleService } from "src/features/vehicles/services/VehicleService";
@@ -22,6 +31,7 @@ import { BookingService } from "../services/BookingService";
   path: "api/bookings",
   version: "1",
 })
+@UseGuards(JwtAuthGuard)
 export class BookingController {
   constructor(
     private readonly bookingService: BookingService,
