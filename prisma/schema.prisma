@@ -50,8 +50,9 @@ model Booking {
   id            String       @id @default(uuid())
   customerId    String
   customer      Customer     @relation(fields: [customerId], references: [id])
-  from          String
+  from          String?
   to            String?
+  duration      Int          @default(1) // 1 day
   notes         String       @db.Text
   status        String?
   vehicleId     String

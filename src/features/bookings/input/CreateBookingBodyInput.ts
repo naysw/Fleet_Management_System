@@ -4,8 +4,9 @@ export interface CreateBookingBodyInput {
   vehicleId: string;
   parkingSlotId?: string;
   customerId: string;
-  from: string;
-  to: string;
+  from?: string;
+  to?: string;
+  duration?: number;
   notes?: string;
   serviceIds?: string[];
 }
@@ -24,6 +25,7 @@ export const createBookingBodyInputSchema = Joi.object<CreateBookingBodyInput>({
   parkingSlotId: Joi.string().uuid({ version: "uuidv4" }).max(255).trim(),
   from: Joi.date().required(),
   to: Joi.date().greater(Joi.ref("from")).required(),
+  duration: Joi.number().greater(0).max(30).required(),
   notes: Joi.string().max(1500).trim(),
   serviceIds: Joi.array()
     .items(Joi.string().uuid({ version: "uuidv4" }).max(255).trim())

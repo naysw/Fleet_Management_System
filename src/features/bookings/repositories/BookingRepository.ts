@@ -22,6 +22,7 @@ export class BookingRepository {
       customerId,
       from,
       to,
+      duration,
       notes,
       serviceIds,
     }: CreateBookingBodyInput,
@@ -53,6 +54,7 @@ export class BookingRepository {
             : undefined,
           from,
           to,
+          duration,
           notes,
           services:
             serviceIds && serviceIds.length > 0

@@ -11,7 +11,7 @@ content-type: application/json
 
 ### Create a new model
 POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
-    ?include=services,customer,vehicle    
+    # ?include=services,customer,vehicle    
 content-type: application/json
 
 {
@@ -19,6 +19,7 @@ content-type: application/json
     "vehicleId": "b73fa6bb-1c60-40dc-a7a1-a89fa91581f6",
     "from": "2022-07-13T17:58:37.493Z",
     "to": "2022-08-13T17:58:37.493Z",
+    "duration": 30,
     "notes": "Do not forget to bring your keys",
     "serviceIds": [
         // basic service id
