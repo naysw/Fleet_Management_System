@@ -14,12 +14,12 @@ content-type: application/json
 
 {
     "carNumber": "7A/5678",
-    "customerId": "76d038e4-698a-4a92-bf78-d04d5add6bec",
+    "customerId": "ed618c3a-b31a-4173-87c8-05736f11a881",
     "from": "2022-07-13T17:58:37.493Z",
     "to": "2022-08-13T17:58:37.493Z",
     "notes": "Do not forget to bring your keys",
     "serviceIds": [
-        "76d038e4-698a-4a92-bf78-d04d5add6bec"
+        # "76d038e4-698a-4a92-bf78-d04d5add6bec"
     ]
 }
 

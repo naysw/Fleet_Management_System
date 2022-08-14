@@ -1,7 +1,9 @@
 import prisma from '../../lib/prisma';
 import customerSeeder from './customerSeeder';
+import serviceSeeder from './serviceSeeder';
 
 (async () => {
+  await serviceSeeder();
   await customerSeeder();
 })()
   .catch((e) => {

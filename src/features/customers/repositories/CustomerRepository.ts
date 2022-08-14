@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { DEFAULT_TAKE, IS_DEV } from 'src/config/constants';
 import { PrismaService } from 'src/services/PrismaService';
-import { includeRelationship, orderByField } from 'src/utils/queryBuilder';
+import { registerInclude, registerOrderBy } from 'src/utils/queryBuilder';
 import { CreateCustomerBodyInput } from '../input/CreateCustomerBodyInput';
 import { FindManyCustomerQueryInput } from '../input/FindManyCustomerQueryInput';
 import { FindOneCustomerQueryInput } from '../input/FindOneCustomerQueryInput';
@@ -29,11 +29,11 @@ export class CustomerRepository {
     try {
       return await this.prismaService.customer.findMany({
         include: {
-          bookings: includeRelationship(include, 'bookings'),
+          bookings: registerInclude(include, 'bookings'),
         },
         skip: Number(skip) || undefined,
         take: Number(take) || DEFAULT_TAKE,
-        orderBy: orderByField(orderBy),
+        orderBy: registerOrderBy(orderBy),
       });
     } catch (error) {
       throw new InternalServerErrorException(
@@ -62,7 +62,7 @@ export class CustomerRepository {
           address,
         },
         include: {
-          bookings: includeRelationship(include, 'bookings'),
+          bookings: registerInclude(include, 'bookings'),
         },
       });
     } catch (error) {
@@ -136,7 +136,7 @@ export class CustomerRepository {
           address,
         },
         include: {
-          bookings: includeRelationship(include, 'bookings'),
+          bookings: registerInclude(include, 'bookings'),
         },
       });
     } catch (error) {

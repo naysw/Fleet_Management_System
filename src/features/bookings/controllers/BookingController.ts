@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
 import { CustomerService } from 'src/features/customers/services/CustomerService';
 import { JoiValidationPipe } from 'src/pipe/JoiValidationPipe';
+import { ResponseResource } from 'src/resources/ResponseResource';
 import {
   CreateBookingBodyInput,
   createBookingBodyInputSchema,
@@ -61,5 +62,9 @@ export class BookingController {
       },
       { include },
     );
+
+    return new ResponseResource(booking)
+      .setMessage('Booking created')
+      .setStatusCode(HttpStatus.CREATED);
   }
 }

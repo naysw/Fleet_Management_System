@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { IS_DEV } from 'src/config/constants';
 import { PrismaService } from 'src/services/PrismaService';
+import { registerInclude } from 'src/utils/queryBuilder';
 import { CreateBookingBodyInput } from '../input/CreateCustomerBodyInput';
 import { FindOneBookingQueryInput } from '../input/FindOneBookingQueryInput';
 
@@ -51,7 +52,10 @@ export class BookingRepository {
               : undefined,
         },
         include: {
-          services: true,
+          services: registerInclude(include, 'services')
+            ? { select: { service: true } }
+            : false,
+          customer: registerInclude(include, 'customer'),
         },
       });
     } catch (error) {
