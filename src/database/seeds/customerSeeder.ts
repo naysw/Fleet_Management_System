@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 import prisma from "../../lib/prisma";
 
-export default async function customerSeeder() {
-  Array.from({ length: 10 }).forEach(async () => {
+export default async function customerSeeder(length: number = 10) {
+  Array.from({ length }).forEach(async () => {
     await prisma.customer.create({
       data: {
         firstName: faker.name.firstName(),
