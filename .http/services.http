@@ -3,22 +3,19 @@
 
 ### find many services
 GET {{BASE_URL}}/{{API_VERSION}}/api/services
-    ?take=5&skip=0&include=bookings&orderBy=createdAt
+    ?take=1&skip=0&include=bookings&orderBy=createdAt
 content-type: application/json
 
 
 
-### Create a new customer
-POST {{BASE_URL}}/{{API_VERSION}}/api/services
-    ?include=bookings    
+### Create a new service
+POST {{BASE_URL}}/{{API_VERSION}}/api/services  
 content-type: application/json
 
 {
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "test@a.com",
-    "phone": "123456789",
-    "address": "123 Main St"
+    "name": "New Service",
+    "price": 4500,
+    "description": "New Service Description"
 }
 
 

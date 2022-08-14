@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Service } from '@prisma/client';
+import { CreateServiceBodyInput } from '../input/CreateServiceBodyInput';
 import { FindManyServiceQueryInput } from '../input/FindManyServiceQueryInput';
 import { ServiceRepository } from '../repositories/ServiceRepository';
 
@@ -33,5 +34,15 @@ export class ServiceService {
     return {
       ...service,
     };
+  }
+
+  async createService({ name, price, description }: CreateServiceBodyInput) {
+    const service = await this.serviceRepository.createService({
+      name,
+      price,
+      description,
+    });
+
+    return this.serviceResource(service);
   }
 }

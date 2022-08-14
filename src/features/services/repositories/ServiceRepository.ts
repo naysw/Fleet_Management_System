@@ -3,6 +3,7 @@ import { Service } from '@prisma/client';
 import { DEFAULT_TAKE, IS_DEV } from 'src/config/constants';
 import { PrismaService } from 'src/services/PrismaService';
 import { registerInclude, registerOrderBy } from 'src/utils/queryBuilder';
+import { CreateServiceBodyInput } from '../input/CreateServiceBodyInput';
 import { FindManyServiceQueryInput } from '../input/FindManyServiceQueryInput';
 
 @Injectable()
@@ -30,6 +31,22 @@ export class ServiceRepository {
     } catch (error) {
       throw new InternalServerErrorException(
         IS_DEV ? error : 'findMany services error',
+      );
+    }
+  }
+
+  async createService({ name, price, description }: CreateServiceBodyInput) {
+    try {
+      return await this.prismaService.service.create({
+        data: {
+          name,
+          price,
+          description,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        IS_DEV ? error : 'create service error',
       );
     }
   }

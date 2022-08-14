@@ -1,8 +1,12 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { Service } from '@prisma/client';
 import { findManyServiceQueryInputSchema } from 'src/features/customers/input/FindManyCustomerQueryInput';
 import { JoiValidationPipe } from 'src/pipe/JoiValidationPipe';
 import { ResponseResource } from 'src/resources/ResponseResource';
+import {
+  CreateServiceBodyInput,
+  createServiceBodyInputSchema,
+} from '../input/CreateServiceBodyInput';
 import { FindManyServiceQueryInput } from '../input/FindManyServiceQueryInput';
 import { ServiceService } from '../services/ServiceService';
 
@@ -37,5 +41,19 @@ export class ServiceController {
     });
 
     return new ResponseResource(services);
+  }
+
+  @Post()
+  async createService(
+    @Body(new JoiValidationPipe(createServiceBodyInputSchema))
+    { name, price, description }: CreateServiceBodyInput,
+  ): Promise<ResponseResource<Service>> {
+    const service = await this.serviceService.createService({
+      name,
+      price,
+      description,
+    });
+
+    return new ResponseResource(service);
   }
 }
