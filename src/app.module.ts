@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import { AuthModule } from "./features/auth/AuthModule";
 import { BookingModule } from "./features/bookings/BookingModule";
 import { CustomerModule } from "./features/customers/CustomerModule";
 import { ServiceModule } from "./features/services/ServiceModule";
@@ -16,6 +17,7 @@ import { GlobalModule } from "./GlobalModule";
     BookingModule,
     ServiceModule,
     VehicleModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

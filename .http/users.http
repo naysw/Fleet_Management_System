@@ -8,7 +8,6 @@ GET {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
 content-type: application/json
 
 
-
 ### Create a new
 POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}  
     ?include=roles
@@ -16,10 +15,15 @@ content-type: application/json
 
 {
     "name": "John Doe",
-    "username": "fsafsd",
+    "username": "assdfdfsd",
     "password": "password",
     "confirmPassword": "password",
-    "roleIds": ["af06802c-8ab1-48d2-af91-6104cfeab150"]
+    "roleIds": [
+        // USER role
+        "06014698-5592-4770-8882-316009d7ed39",
+        // ADMIN role
+        "552f9d07-8bb9-42f8-84b8-13caef796d1a"
+    ]
 }
 
 

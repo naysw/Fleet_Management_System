@@ -162,7 +162,7 @@ export class UserService {
    *
    * @param user User
    */
-  private userResource({
+  public userResource({
     id,
     name,
     username,
