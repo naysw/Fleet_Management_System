@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Service } from '@prisma/client';
-import { CreateServiceBodyInput } from '../input/CreateServiceBodyInput';
-import { FindManyServiceQueryInput } from '../input/FindManyServiceQueryInput';
-import { UpdateServiceBodyInput } from '../input/UpdateServiceBodyInput';
-import { ServiceRepository } from '../repositories/ServiceRepository';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { Service } from "@prisma/client";
+import { CreateServiceBodyInput } from "../input/CreateServiceBodyInput";
+import { FindManyServiceQueryInput } from "../input/FindManyServiceQueryInput";
+import { UpdateServiceBodyInput } from "../input/UpdateServiceBodyInput";
+import { ServiceRepository } from "../repositories/ServiceRepository";
 
 @Injectable()
 export class ServiceService {
@@ -41,7 +41,9 @@ export class ServiceService {
     const service = await this.serviceRepository.findById(id);
 
     if (!service)
-      throw new NotFoundException(`Service with id ${id} not found`);
+      throw new NotFoundException(
+        `Service with id ${JSON.stringify(id)} not found`,
+      );
 
     return service;
   }
@@ -71,5 +73,18 @@ export class ServiceService {
 
   async deleteService(id: string) {
     await this.serviceRepository.deleteService(id);
+  }
+
+  /**
+   * check services ids are existing in database or not
+   *
+   * @param serviceIds string[]
+   *
+   * @return void
+   */
+  async existsServiceIds(serviceIds: string[]): Promise<void> {
+    for (const id of serviceIds) {
+      await this.findOrFailById(id);
+    }
   }
 }

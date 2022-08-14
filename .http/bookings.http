@@ -1,32 +1,35 @@
 @BASE_URL=http://localhost:3002
 @API_VERSION=v1
 
-### find many bookings
-GET {{BASE_URL}}/{{API_VERSION}}/api/bookings
+@MODEL=bookings
+
+### find many
+GET {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
     ?take=5&skip=0&include=services,customer&orderBy=createdAt
 content-type: application/json
 
 
-### Create a new booking
-POST {{BASE_URL}}/{{API_VERSION}}/api/bookings
-    ?include=services,customer    
+### Create a new model
+POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
+    ?include=services,customer,vehicle    
 content-type: application/json
 
 {
-    "carNumber": "7A/5678",
-    "customerId": "ed618c3a-b31a-4173-87c8-05736f11a881",
+    "customerId": "da574263-10b0-4aa0-adf7-e2408cca397c",
+    "vehicleId": "b73fa6bb-1c60-40dc-a7a1-a89fa91581f6",
     "from": "2022-07-13T17:58:37.493Z",
     "to": "2022-08-13T17:58:37.493Z",
     "notes": "Do not forget to bring your keys",
     "serviceIds": [
-        # "76d038e4-698a-4a92-bf78-d04d5add6bec"
+        // basic service id
+        "e9ca5647-fb16-46e8-b23f-ff63be5a6351"
     ]
 }
 
 
 
-### update customer from given id
-PATCH {{BASE_URL}}/{{API_VERSION}}/api/bookings/76d038e4-698a-4a92-bf78-d04d5add6bec
+### update model from given id
+PATCH {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/76d038e4-698a-4a92-bf78-d04d5add6bec
     ?include=bookings    
 content-type: application/json
 
@@ -38,6 +41,6 @@ content-type: application/json
 }
 
 
-### delete customer from given id
-DELETE  {{BASE_URL}}/{{API_VERSION}}/api/bookings/f202a506-f91b-4e1b-bf77-88fad711e96d  
+### delete model from given id
+DELETE  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/f202a506-f91b-4e1b-bf77-88fad711e96d  
 content-type: application/json

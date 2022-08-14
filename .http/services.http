@@ -1,15 +1,17 @@
 @BASE_URL=http://localhost:3002
 @API_VERSION=v1
 
-### find many services
-GET {{BASE_URL}}/{{API_VERSION}}/api/services
+@MODEL=services
+
+### find many model
+GET {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
     ?take=1&skip=0&include=bookings&orderBy=createdAt
 content-type: application/json
 
 
 
-### Create a new service
-POST {{BASE_URL}}/{{API_VERSION}}/api/services  
+### Create a new model
+POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}  
 content-type: application/json
 
 {
@@ -20,8 +22,8 @@ content-type: application/json
 
 
 
-### update service from given id
-PATCH {{BASE_URL}}/{{API_VERSION}}/api/services/c9642146-556a-4133-8756-20d04c1e313e
+### update model from given id
+PATCH {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/c9642146-556a-4133-8756-20d04c1e313e
     ?include=bookings    
 content-type: application/json
 
@@ -32,6 +34,6 @@ content-type: application/json
 }
 
 
-### delete service from given id
-DELETE  {{BASE_URL}}/{{API_VERSION}}/api/services/c9642146-556a-4133-8756-20d04c1e313e
+### delete model from given id
+DELETE  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/c9642146-556a-4133-8756-20d04c1e313e
 content-type: application/json

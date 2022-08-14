@@ -1,9 +1,9 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { IS_DEV } from 'src/config/constants';
-import { PrismaService } from 'src/services/PrismaService';
-import { registerInclude } from 'src/utils/queryBuilder';
-import { CreateBookingBodyInput } from '../input/CreateCustomerBodyInput';
-import { FindOneBookingQueryInput } from '../input/FindOneBookingQueryInput';
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { IS_DEV } from "src/config/constants";
+import { PrismaService } from "src/services/PrismaService";
+import { registerInclude } from "src/utils/queryBuilder";
+import { CreateBookingBodyInput } from "../input/CreateBookingBodyInput";
+import { FindOneBookingQueryInput } from "../input/FindOneBookingQueryInput";
 
 @Injectable()
 export class BookingRepository {
@@ -66,15 +66,17 @@ export class BookingRepository {
               : undefined,
         },
         include: {
-          services: registerInclude(include, 'services')
+          services: registerInclude(include, "services")
             ? { select: { service: true } }
             : false,
-          customer: registerInclude(include, 'customer'),
+          customer: registerInclude(include, "customer"),
+          vehicle: registerInclude(include, "vehicle"),
+          parkingSlot: registerInclude(include, "parkingSlot"),
         },
       });
     } catch (error) {
       throw new InternalServerErrorException(
-        IS_DEV ? error : 'create booking failed',
+        IS_DEV ? error : "create booking failed",
       );
     }
   }

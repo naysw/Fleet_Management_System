@@ -1,13 +1,15 @@
-import Joi from 'joi';
-import { BaseQueryInput } from 'src/input/BaseQueryInput';
-import { allowedInclude } from 'src/utils/customValidation';
+import Joi from "joi";
+import { BaseQueryInput } from "src/input/BaseQueryInput";
+import { allowedInclude } from "src/utils/customValidation";
 
-export type FindOneBookingQueryInput = Pick<BaseQueryInput, 'include'>;
+export type FindOneBookingQueryInput = Pick<BaseQueryInput, "include">;
 
 export const findOneBookingQueryInputSchema =
   Joi.object<FindOneBookingQueryInput>({
     include: Joi.string()
       .max(255)
       .trim()
-      .custom(allowedInclude(['services', 'customer'])),
+      .custom(
+        allowedInclude(["services", "customer", "vehicle", "parkingSlot"]),
+      ),
   });

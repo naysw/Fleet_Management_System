@@ -1,15 +1,17 @@
 @BASE_URL=http://localhost:3002
 @API_VERSION=v1
 
-### find many customers
-GET {{BASE_URL}}/{{API_VERSION}}/api/customers
+@MODEL=customers
+
+### find many
+GET {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
     ?take=5&skip=0&include=bookings&orderBy=createdAt
 content-type: application/json
 
 
 
-### Create a new customer
-POST {{BASE_URL}}/{{API_VERSION}}/api/customers
+### Create a new model
+POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
     ?include=bookings    
 content-type: application/json
 
@@ -23,8 +25,8 @@ content-type: application/json
 
 
 
-### update customer from given id
-PATCH {{BASE_URL}}/{{API_VERSION}}/api/customers/76d038e4-698a-4a92-bf78-d04d5add6bec
+### update model from given id
+PATCH {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/76d038e4-698a-4a92-bf78-d04d5add6bec
     ?include=bookings    
 content-type: application/json
 
@@ -36,6 +38,6 @@ content-type: application/json
 }
 
 
-### delete customer from given id
-DELETE  {{BASE_URL}}/{{API_VERSION}}/api/customers/f202a506-f91b-4e1b-bf77-88fad711e96d  
+### delete model from given id
+DELETE  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/f202a506-f91b-4e1b-bf77-88fad711e96d  
 content-type: application/json
