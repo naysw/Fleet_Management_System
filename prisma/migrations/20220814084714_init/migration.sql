@@ -71,6 +71,7 @@ CREATE TABLE `Vehicle` (
     `categoryId` VARCHAR(191) NULL,
     `customerId` VARCHAR(191) NOT NULL,
     `mediaId` VARCHAR(191) NULL,
+    `description` TEXT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 

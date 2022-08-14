@@ -83,6 +83,7 @@ model Vehicle {
   customer    Customer  @relation(fields: [customerId], references: [id])
   customerId  String
   mediaId     String?
+  description String?   @db.Text
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @default(now())
 

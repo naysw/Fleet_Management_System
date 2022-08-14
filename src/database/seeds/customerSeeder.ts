@@ -1,5 +1,5 @@
-import { faker } from '@faker-js/faker';
-import prisma from '../../lib/prisma';
+import { faker } from "@faker-js/faker";
+import prisma from "../../lib/prisma";
 
 export default async function customerSeeder() {
   Array.from({ length: 10 }).forEach(async () => {
@@ -10,6 +10,14 @@ export default async function customerSeeder() {
         email: faker.internet.email(),
         phone: faker.phone.number(),
         address: faker.address.streetAddress(),
+        vehicles: {
+          create: [
+            {
+              plateNumber: faker.random.alphaNumeric(7),
+              description: faker.lorem.sentence(),
+            },
+          ],
+        },
       },
     });
   });

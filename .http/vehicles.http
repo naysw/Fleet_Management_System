@@ -1,0 +1,38 @@
+@BASE_URL=http://localhost:3002
+@API_VERSION=v1
+@MODEL=vehicles
+
+### find many
+GET {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
+    ?take=1&skip=0&include=category,customer&orderBy=createdAt
+content-type: application/json
+
+
+
+### Create a new
+POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}  
+    ?include=category,customer
+content-type: application/json
+
+{
+    "plateNumber": "7A-123-456",
+    "customerId": "270c3d5e-d034-4529-8f66-f2bec135ad24",
+    "description": "New Vehicle Description"
+}
+
+
+
+### update model from given id
+PATCH {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/309ce3d0-19a0-41f3-b252-2662b2a634f0
+    ?include=category,customer   
+content-type: application/json
+
+{
+    "plateNumber": "7A-123-456",
+    "description": "New Vehicle Description"  
+}
+
+
+### delete model from given id
+DELETE  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/cfe06366-d1d2-4e20-8dd4-ab65db9aa281
+content-type: application/json
