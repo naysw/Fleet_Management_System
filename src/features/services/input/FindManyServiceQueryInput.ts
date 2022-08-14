@@ -2,10 +2,10 @@ import Joi from 'joi';
 import { BaseQueryInput } from 'src/input/BaseQueryInput';
 import { allowedInclude, allowedOrderBy } from 'src/utils/customValidation';
 
-export interface FindManyCustomerQueryInput extends BaseQueryInput {}
+export interface FindManyServiceQueryInput extends BaseQueryInput {}
 
-export const findManyServiceQueryInputSchema =
-  Joi.object<FindManyCustomerQueryInput>({
+export const findManyCustomerQueryInputSchema =
+  Joi.object<FindManyServiceQueryInput>({
     take: Joi.number().max(255),
     skip: Joi.number().max(255),
     include: Joi.string()

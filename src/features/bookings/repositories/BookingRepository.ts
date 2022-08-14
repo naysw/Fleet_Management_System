@@ -17,7 +17,8 @@ export class BookingRepository {
    */
   async createOne(
     {
-      carNumber,
+      vehicleId,
+      parkingSlotId,
       customerId,
       from,
       to,
@@ -29,11 +30,24 @@ export class BookingRepository {
     try {
       return await this.prismaService.booking.create({
         data: {
-          carNumber,
           customer: customerId
             ? {
                 connect: {
                   id: customerId,
+                },
+              }
+            : undefined,
+          vehicle: vehicleId
+            ? {
+                connect: {
+                  id: vehicleId,
+                },
+              }
+            : undefined,
+          parkingSlot: parkingSlotId
+            ? {
+                connect: {
+                  id: parkingSlotId,
                 },
               }
             : undefined,

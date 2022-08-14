@@ -18,7 +18,7 @@ import {
 } from '../input/CreateCustomerBodyInput';
 import {
   FindManyCustomerQueryInput,
-  findManyCustomerQueryInputSchema,
+  findManyServiceQueryInputSchema,
 } from '../input/FindManyCustomerQueryInput';
 import {
   FindOneCustomerQueryInput,
@@ -45,7 +45,7 @@ export class CustomerController {
    */
   @Get()
   async findMany(
-    @Query(new JoiValidationPipe(findManyCustomerQueryInputSchema))
+    @Query(new JoiValidationPipe(findManyServiceQueryInputSchema))
     {
       take,
       skip,

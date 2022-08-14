@@ -41,14 +41,51 @@ CREATE TABLE `Service` (
 -- CreateTable
 CREATE TABLE `Booking` (
     `id` VARCHAR(191) NOT NULL,
-    `carNumber` VARCHAR(191) NOT NULL,
     `customerId` VARCHAR(191) NOT NULL,
     `from` VARCHAR(191) NOT NULL,
     `to` VARCHAR(191) NULL,
     `notes` TEXT NOT NULL,
+    `status` VARCHAR(191) NULL,
+    `vehicleId` VARCHAR(191) NOT NULL,
+    `parkingSlotId` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Category` (
+    `id` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Vehicle` (
+    `id` VARCHAR(191) NOT NULL,
+    `plateNumber` VARCHAR(191) NOT NULL,
+    `categoryId` VARCHAR(191) NULL,
+    `customerId` VARCHAR(191) NOT NULL,
+    `mediaId` VARCHAR(191) NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ParkingSlot` (
+    `id` VARCHAR(191) NOT NULL,
+    `slotNumber` VARCHAR(191) NOT NULL,
+    `status` VARCHAR(191) NOT NULL DEFAULT 'free',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    UNIQUE INDEX `ParkingSlot_slotNumber_key`(`slotNumber`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -63,12 +100,14 @@ CREATE TABLE `ServicesOnBooking` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Invoice` (
+CREATE TABLE `Payment` (
     `id` VARCHAR(191) NOT NULL,
-    `amount` INTEGER NOT NULL,
+    `amount` DOUBLE NOT NULL,
     `status` VARCHAR(191) NOT NULL DEFAULT 'PENDING',
     `bookingId` VARCHAR(191) NOT NULL,
     `customProperties` JSON NULL,
+    `paidBy` VARCHAR(191) NULL,
+    `description` TEXT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -144,13 +183,25 @@ CREATE TABLE `Notification` (
 ALTER TABLE `Booking` ADD CONSTRAINT `Booking_customerId_fkey` FOREIGN KEY (`customerId`) REFERENCES `Customer`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `Booking` ADD CONSTRAINT `Booking_vehicleId_fkey` FOREIGN KEY (`vehicleId`) REFERENCES `Vehicle`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Booking` ADD CONSTRAINT `Booking_parkingSlotId_fkey` FOREIGN KEY (`parkingSlotId`) REFERENCES `ParkingSlot`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Vehicle` ADD CONSTRAINT `Vehicle_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `Category`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Vehicle` ADD CONSTRAINT `Vehicle_customerId_fkey` FOREIGN KEY (`customerId`) REFERENCES `Customer`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `ServicesOnBooking` ADD CONSTRAINT `ServicesOnBooking_bookingId_fkey` FOREIGN KEY (`bookingId`) REFERENCES `Booking`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ServicesOnBooking` ADD CONSTRAINT `ServicesOnBooking_serviceId_fkey` FOREIGN KEY (`serviceId`) REFERENCES `Service`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Invoice` ADD CONSTRAINT `Invoice_bookingId_fkey` FOREIGN KEY (`bookingId`) REFERENCES `Booking`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Payment` ADD CONSTRAINT `Payment_bookingId_fkey` FOREIGN KEY (`bookingId`) REFERENCES `Booking`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `RolesOnPermissons` ADD CONSTRAINT `RolesOnPermissons_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

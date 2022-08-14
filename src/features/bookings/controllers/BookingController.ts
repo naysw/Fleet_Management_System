@@ -38,8 +38,9 @@ export class BookingController {
   async createBooking(
     @Body(new JoiValidationPipe(createBookingBodyInputSchema))
     {
-      carNumber,
+      vehicleId,
       customerId,
+      parkingSlotId,
       from,
       to,
       notes,
@@ -53,7 +54,8 @@ export class BookingController {
 
     const booking = await this.bookingService.createOne(
       {
-        carNumber,
+        vehicleId,
+        parkingSlotId,
         customerId,
         from,
         to,

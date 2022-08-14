@@ -1,0 +1,41 @@
+@BASE_URL=http://localhost:3002
+@API_VERSION=v1
+
+### find many services
+GET {{BASE_URL}}/{{API_VERSION}}/api/services
+    ?take=5&skip=0&include=bookings&orderBy=createdAt
+content-type: application/json
+
+
+
+### Create a new customer
+POST {{BASE_URL}}/{{API_VERSION}}/api/services
+    ?include=bookings    
+content-type: application/json
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "test@a.com",
+    "phone": "123456789",
+    "address": "123 Main St"
+}
+
+
+
+### update customer from given id
+PATCH {{BASE_URL}}/{{API_VERSION}}/api/services/76d038e4-698a-4a92-bf78-d04d5add6bec
+    ?include=bookings    
+content-type: application/json
+
+{
+    "firstName": "John Update",
+    "lastName": "Doe Update",
+    "phone": "123456789444",
+    "address": "123 Main St"
+}
+
+
+### delete customer from given id
+DELETE  {{BASE_URL}}/{{API_VERSION}}/api/services/f202a506-f91b-4e1b-bf77-88fad711e96d  
+content-type: application/json

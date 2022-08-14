@@ -9,7 +9,8 @@ export class BookingService {
 
   async createOne(
     {
-      carNumber,
+      vehicleId,
+      parkingSlotId,
       customerId,
       from,
       to,
@@ -20,7 +21,8 @@ export class BookingService {
   ) {
     return await this.bookingRepository.createOne(
       {
-        carNumber,
+        vehicleId,
+        parkingSlotId,
         customerId,
         from,
         to,

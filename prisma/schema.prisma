@@ -31,6 +31,7 @@ model Customer {
   updatedAt DateTime @default(now())
 
   bookings Booking[]
+  vehicles Vehicle[]
 }
 
 model Service {
@@ -46,18 +47,56 @@ model Service {
 }
 
 model Booking {
+  id            String       @id @default(uuid())
+  customerId    String
+  customer      Customer     @relation(fields: [customerId], references: [id])
+  from          String
+  to            String?
+  notes         String       @db.Text
+  status        String?
+  vehicleId     String
+  vehicle       Vehicle      @relation(fields: [vehicleId], references: [id])
+  parkingSlot   ParkingSlot? @relation(fields: [parkingSlotId], references: [id])
+  parkingSlotId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  services ServicesOnBooking[]
+  payments Payment[]
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  vehicles Vehicle[]
+}
+
+model Vehicle {
+  id          String    @id @default(uuid())
+  plateNumber String
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
+  customer    Customer  @relation(fields: [customerId], references: [id])
+  customerId  String
+  mediaId     String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+
+  bookings Booking[]
+}
+
+model ParkingSlot {
   id         String   @id @default(uuid())
-  carNumber  String
-  customerId String
-  customer   Customer @relation(fields: [customerId], references: [id])
-  from       String
-  to         String?
-  notes      String   @db.Text
+  slotNumber String   @unique
+  status     String   @default("free")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now())
 
-  services ServicesOnBooking[]
-  invoices Invoice[]
+  bookings Booking[]
 }
 
 model ServicesOnBooking {
@@ -71,16 +110,19 @@ model ServicesOnBooking {
   @@id([bookingId, serviceId])
 }
 
-model Invoice {
+model Payment {
   id     String @id @default(uuid())
-  amount Int
+  amount Float
   status String @default("PENDING")
 
   bookingId        String
-  booking          Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  booking          Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   customProperties Json?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @default(now())
+  paidBy           String?
+  description      String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model ActivityLog {
