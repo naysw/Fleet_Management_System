@@ -17,13 +17,12 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 }
 
 ### pay invoice
-PATCH  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/ecb896c0-be6d-4273-b311-c6193b51623a/pay
+PATCH  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/cbeff71a-e3d3-4f39-9eed-e3b56016a5ad/pay
     ?include=customer,booking,payment
 content-type: application/json
 Authorization: Bearer {{ACCESS_TOKEN}}
 
 {
-    "status": "PAID",
     "amount": 4500,
     "paidBy": "Mr.Ok"
 }

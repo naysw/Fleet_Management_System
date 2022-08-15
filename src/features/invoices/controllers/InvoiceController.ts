@@ -15,6 +15,7 @@ import { CustomerService } from "src/features/customers/services/CustomerService
 import { Mail } from "src/lib/Mail";
 import { JoiValidationPipe } from "src/pipe/JoiValidationPipe";
 import { ResponseResource } from "src/resources/ResponseResource";
+import { INVOICE_PAID } from "../config/constants";
 import {
   CreateInvoiceInput,
   createInvoiceInputSchema,
@@ -86,7 +87,7 @@ export class InvoiceController {
   async pay(
     @Param("id", new ParseUUIDPipe()) id: string,
     @Body(new JoiValidationPipe(payInvoiceInputSchema))
-    { status, amount, paidBy, description }: PayInvoiceInput,
+    { amount, paidBy, description }: PayInvoiceInput,
     @Query(new JoiValidationPipe(findOneInvoiceQueryInputSchema))
     { include }: FindOneInvoiceInput,
   ) {
@@ -94,7 +95,7 @@ export class InvoiceController {
 
     const paidInvoice = await this.invoiceService.pay(
       id,
-      { status, amount, paidBy, description },
+      { amount, paidBy, description, status: INVOICE_PAID },
       { include },
     );
 

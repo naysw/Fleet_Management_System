@@ -55,7 +55,7 @@ model Booking {
   to            String?
   duration      Int          @default(1) // 1 day
   notes         String       @db.Text
-  status        String?
+  status        String?      @default("ONGOING")
   vehicleId     String
   vehicle       Vehicle      @relation(fields: [vehicleId], references: [id])
   parkingSlot   ParkingSlot? @relation(fields: [parkingSlotId], references: [id])

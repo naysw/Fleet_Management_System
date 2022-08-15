@@ -1,7 +1,9 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { IS_DEV } from "src/config/constants";
+import { BOOKING_COMPLETED } from "src/features/bookings/config/constants";
 import { PrismaService } from "src/services/PrismaService";
 import { registerInclude } from "src/utils/queryBuilder";
+import { INVOICE_PENDING } from "../config/constants";
 import { CreateInvoiceInput } from "../input/CreateInvoiceInput";
 import { FindOneInvoiceInput } from "../input/FindOneInvoiceInput";
 import { PayInvoiceInput } from "../input/PayInvoiceInput";
@@ -66,7 +68,7 @@ export class InvoiceRepository {
               id,
             },
             {
-              status: "PENDING",
+              status: INVOICE_PENDING,
             },
           ],
         },
@@ -99,6 +101,11 @@ export class InvoiceRepository {
               amount,
               paidBy,
               description,
+            },
+          },
+          booking: {
+            update: {
+              status: BOOKING_COMPLETED,
             },
           },
         },

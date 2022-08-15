@@ -1,0 +1,2 @@
+export const BOOKING_ONGOING = "ONGOING";
+export const BOOKING_COMPLETED = "COMPLETED";
