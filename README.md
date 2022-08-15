@@ -16,7 +16,7 @@
 ## Installation and Setup
 
 ```bash
-  git@github.com:naysw/Fleet_Management_System.git
+git@github.com:naysw/Fleet_Management_System.git
 ```
 
 ```bash
@@ -55,7 +55,7 @@ or
 npm run dev
 ```
 
-Migrate database and Seed Dummy Data
+Migrate database and Seed dummy data
 
 ```bash
 yarn prisma migrate reset
@@ -79,9 +79,12 @@ docker run -d -p 3002:3002 --env-file ./evn Fleet_Management_System
 
 # API Docs
 
-if your are using VScode, you will find out all of api end point inside `.http` folder, using Http Client ext: https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+if your are using VScode, you will find out all of api end point inside `.http` folder, that are make with `Http Client` ext: you can install if you not have it or you can use `Postman` if you want
+https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 
-## Get Token
+## (1) Get Token
+
+to perform every action, you will need to login and have valid access token, we are using `jwt` token
 
 ```bash
   POST /v1/api/auth/login
@@ -106,11 +109,11 @@ if your are using VScode, you will find out all of api end point inside `.http` 
 }
 ```
 
-## Create a Booking
+## (2) Create a Booking
 
-To create a booking, make sure your database has atleast one customer with vehicle record, if not, you can create a vehicle from below endpoint or you can use from your seeded data
+To create a booking, make sure your database has atleast one customer record with vehicle attached, if not, you can go and create a vehicle from below endpoint or you can use from your seeded data if you want.
 
-#### Create Vehicle API
+(2.1) Create Vehicle API
 
 Body
 | Name | Type | Description | Mandatory
@@ -119,7 +122,7 @@ Body
 | customerId | String - UUID/v4 | customer | Yes
 | description| String | vehicle descrion | No
 
-Query => when you request post data and you set return key and value as query string,
+Query => when you request post data, you can set which data you wold like to getback using `include` for relationship, by default relationship will not include on any request.
 
 | Name    | Type   | Description                                                                               | Mandatory |
 | ------- | ------ | ----------------------------------------------------------------------------------------- | --------- |
@@ -172,28 +175,28 @@ Response
 }
 ```
 
-For REST full `vehicles` api , you can find out more detail on `.http/vehicles.http` file
+Note: For REST full `vehicles` api , you can find out more detail on `.http/vehicles.http` file
 
-if atleast one customer and one vehicle that associated with customer, we can now start create booking
+In the next step, we can not start create booking if you have `one customer , one vehicle, one service`, if not make sure you create it correctly.
 
-#### Create Booking API
+## (2) Register Booking
 
 Body
 | Name | Type | Description | Mandatory
 | --------- | ----------- | ------ | ----- |
 | customerId | String - UUID/v4 | customer id to associate with Booking | Yes
 | vehicleId | String - UUID/v4 | vehicle id | Yes
-| from| String/timestamps | date time when start, should less than `to` | Yes
-| to | String/timestamps | date time when booking will end, should greater than `from` | Yes
+| from| String/timestamps | booking start date (timestamp), should less than `to` | Yes
+| to | String/timestamps | booking end date (timestamp), should greater than `from` | Yes
 |duration | Number | number of days for booking, default is 1 day and max if 30 days | Yes
 | notes | String | extra notes | No
-| additionalServiceItems | Array | list of additionalServiceItems item, each item should have `serviceId`, `quantity`, `discount`, if you specified `additionalServiceItems`, server will merge your provided item and basic Parking Fees, every newly created Booking, we will have default parking fees service will created and connect with id | No
+| additionalServiceItems | Array | list of additionalServiceItems item, each item should have `serviceId`, `quantity`, `discount`, if you specified `additionalServiceItems`, server will merge your provided item and `Basic Parking Fees` Service Item that set on server.In every newly created Booking. we will have default parking fees service will created and connect with id | No
 
-Query =>
+Query Keys
 
-| Name    | Type   | Description                                                                                                     | Mandatory |
-| ------- | ------ | --------------------------------------------------------------------------------------------------------------- | --------- |
-| include | String | relationship key are `additionalServiceItems,customer,vehicle` make sure you saperate with "," for multiple key | No        |
+| Name    | Type   | Description                                                                                                              | Mandatory |
+| ------- | ------ | ------------------------------------------------------------------------------------------------------------------------ | --------- |
+| include | String | allowed relationship key are `additionalServiceItems,customer,vehicle` make sure you saperate with "," for multiple keys | No        |
 
 Example
 
@@ -275,9 +278,9 @@ Response Data
 
 For REST full `bookings` api , you can find out more detail on `.http/bookings.http` file
 
-### Generate Invoice for Booking
+## (3) Generate Invoice for Booking
 
-To generate invoice for specify booking, you you have to make an api call
+Your customer will need to get an invoice for booking, to generate invoice for specify booking, you you have to request with valid bookingId and customerId, you can create multiple invoice from one invoice
 
 Body
 | Name | Type | Description | Mandatory
@@ -285,7 +288,7 @@ Body
 | bookingId | String - UUID/v4 | booking Id (uuid) that we newaly created, | Yes
 | customerId | String - UUID/v4 | customer id | Yes
 
-Query => when you request post data and you set return key and value as query string,
+Query keys
 
 | Name    | Type   | Description                                                                                      | Mandatory |
 | ------- | ------ | ------------------------------------------------------------------------------------------------ | --------- |
@@ -334,7 +337,7 @@ Response
       "to": "2022-08-13T17:58:37.493Z",
       "duration": 30,
       "notes": "Do not forget to bring your keys",
-      "status": "COMPLETED",
+      "status": "PENDING",
       "vehicleId": "fd908d14-7b83-49de-bfec-874348283ef7",
       "parkingSlotId": null,
       "createdAt": "2022-08-15T05:37:53.011Z",
@@ -360,17 +363,17 @@ Response
 
 ```
 
-### Pay Payment
+## (4) Make Payment
 
-To pay for specify invoice, you you have to make an api call
+To pay for specify invoice or booking, make sure you request invoice with `status` column should be `PENDING` otherwished you will received not found exception
 
-Body
+Body Payload
 | Name | Type | Description | Mandatory
 | --------- | ----------- | ------ | ----- |
 | amount | Number | amount customer need to pay, normally, front end will calculate from total amount base on cusotmer services | Yes
-| paidId | String | name of customer as string | Yes
+| paidBy | String | name of customer who make this payment for specify invoice | Yes
 
-Query => when you request post data and you set return key and value as query string,
+Query keys
 
 | Name    | Type   | Description                                                                                      | Mandatory |
 | ------- | ------ | ------------------------------------------------------------------------------------------------ | --------- |
@@ -396,8 +399,6 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 ```
 
 Response Data
-
-Note: we will looking for invoice with `PENDING` state only, if any other value is existing in `status` column, we will response `NotFound or already paid exception`
 
 ```bash
 {
@@ -462,3 +463,9 @@ For REST full `services` api , you can find out more detail on `.http/services.h
 ### User REST Api
 
 For REST full `users` api , you can find out more detail on `.http/users.http` file
+
+### Vehicle REST Api
+
+For REST full `vehicles` api , you can find out more detail on `.http/vehicles.http` file
+
+Note: If you found any bugs, please contact me via email or issuce box. Thanks
