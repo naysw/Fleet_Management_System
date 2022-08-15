@@ -77,10 +77,17 @@ docker build -t Fleet_Management_System .
 docker run -d -p 3002:3002 --env-file ./evn Fleet_Management_System
 ```
 
-# API Docs
+## Overview
 
 if your are using VScode, you will find out all of api end point inside `.http` folder, that are make with `Http Client` ext: you can install if you not have it or you can use `Postman` if you want
 https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+#### Authentication and Authorization
+
+- you will need valid access token to perform on each request
+- you will need `ADMIN` roles to `create` `update` and `delete` request
+- when you build with `docker` and use same container network , make sure your you setup your datbase correctly
+- if you would like to use your application on production, make sure you setup email server correctly, otherwise `nodemailer` will use random generated test email.
 
 ## (1) Get Token
 
