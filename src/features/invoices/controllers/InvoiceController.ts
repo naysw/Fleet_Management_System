@@ -1,7 +1,18 @@
-import { Body, Controller, Post, Query, Req, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from "@nestjs/common";
 import { JwtAuthGuard } from "src/features/auth/guards/JwtAuthGuard";
 import { BookingService } from "src/features/bookings/services/BookingService";
 import { CustomerService } from "src/features/customers/services/CustomerService";
+import { Mail } from "src/lib/Mail";
 import { JoiValidationPipe } from "src/pipe/JoiValidationPipe";
 import { ResponseResource } from "src/resources/ResponseResource";
 import {
@@ -12,6 +23,10 @@ import {
   FindOneInvoiceInput,
   findOneInvoiceQueryInputSchema,
 } from "../input/FindOneInvoiceInput";
+import {
+  PayInvoiceInput,
+  payInvoiceInputSchema,
+} from "../input/PayInvoiceInput";
 import { InvoiceService } from "../services/InvoiceService";
 
 @Controller({
@@ -38,7 +53,7 @@ export class InvoiceController {
     @Query(new JoiValidationPipe(findOneInvoiceQueryInputSchema))
     { include }: FindOneInvoiceInput,
   ) {
-    await this.customerService.findOrFailById(customerId);
+    const customer = await this.customerService.findOrFailById(customerId);
     await this.bookingService.findOrFailById(bookingId);
 
     const invoice = await this.invoiceService.create(
@@ -51,6 +66,51 @@ export class InvoiceController {
       { include },
     );
 
+    if (customer.email) {
+      new Mail(
+        "test@test.com",
+        customer.email,
+        "Car Parking Invoice Created",
+        "New invoice has been created",
+        `<div>
+          Hello ${customer.firstName} , 
+          Thanks for using our service, here is your invoice
+        </div>`,
+      ).send();
+    }
+
     return new ResponseResource(invoice);
+  }
+
+  @Patch(":id/pay")
+  async pay(
+    @Param("id", new ParseUUIDPipe()) id: string,
+    @Body(new JoiValidationPipe(payInvoiceInputSchema))
+    { status, amount, paidBy, description }: PayInvoiceInput,
+    @Query(new JoiValidationPipe(findOneInvoiceQueryInputSchema))
+    { include }: FindOneInvoiceInput,
+  ) {
+    const invoice = await this.invoiceService.findNotPaidInvoice(id);
+
+    const paidInvoice = await this.invoiceService.pay(
+      id,
+      { status, amount, paidBy, description },
+      { include },
+    );
+
+    if (invoice.customer?.email) {
+      new Mail(
+        "test@test.com",
+        invoice.customer.email,
+        "Car Parking Invoice Created",
+        "New invoice has been created",
+        `<div>
+          Hello ${invoice.customer.firstName} , 
+          Thanks for using our service, here is your invoice
+        </div>`,
+      ).send();
+    }
+
+    return new ResponseResource(paidInvoice).setMessage("Invoice paid");
   }
 }

@@ -75,7 +75,7 @@ export class BookingController {
      */
     await this.vehicleService.findOrFailById(vehicleId);
 
-    const hasASI =
+    const hasAdditionalServiceItems =
       additionalServiceItems &&
       Array.isArray(additionalServiceItems) &&
       additionalServiceItems.length > 0;
@@ -83,7 +83,7 @@ export class BookingController {
     /**
      * validate incoming serviceId is whether exist or not
      */
-    if (hasASI)
+    if (hasAdditionalServiceItems)
       await this.serviceService.existsServiceIds(
         additionalServiceItems.map((item) => item.serviceId),
       );
@@ -106,7 +106,7 @@ export class BookingController {
       discount: 0,
     };
 
-    const addSItems = hasASI
+    const addSItems = hasAdditionalServiceItems
       ? [...additionalServiceItems, basicItem]
       : [basicItem];
 

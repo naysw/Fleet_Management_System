@@ -4,6 +4,7 @@ import { PrismaService } from "src/services/PrismaService";
 import { registerInclude } from "src/utils/queryBuilder";
 import { CreateInvoiceInput } from "../input/CreateInvoiceInput";
 import { FindOneInvoiceInput } from "../input/FindOneInvoiceInput";
+import { PayInvoiceInput } from "../input/PayInvoiceInput";
 
 @Injectable()
 export class InvoiceRepository {
@@ -52,6 +53,64 @@ export class InvoiceRepository {
     } catch (error) {
       throw new InternalServerErrorException(
         `Error creating invoice: ${IS_DEV && error}`,
+      );
+    }
+  }
+
+  async findNotPaidInvoice(id: string) {
+    try {
+      return await this.prismaService.invoice.findFirst({
+        where: {
+          AND: [
+            {
+              id,
+            },
+            {
+              status: "PENDING",
+            },
+          ],
+        },
+        include: {
+          customer: true,
+          booking: true,
+          payment: true,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error finding invoice: ${IS_DEV && JSON.stringify(error)}`,
+      );
+    }
+  }
+
+  async pay(
+    id: string,
+    { status, amount, paidBy, description }: PayInvoiceInput,
+    { include }: FindOneInvoiceInput,
+  ) {
+    try {
+      return await this.prismaService.invoice.update({
+        where: { id },
+        data: {
+          status,
+          payment: {
+            update: {
+              status,
+              amount,
+              paidBy,
+              description,
+            },
+          },
+        },
+        include: {
+          customer: registerInclude(include, "customer"),
+          booking: registerInclude(include, "booking"),
+          payment: registerInclude(include, "payment"),
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Error updating invoice: ${IS_DEV && error}`,
       );
     }
   }

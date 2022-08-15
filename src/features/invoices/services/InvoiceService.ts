@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { randomBytes } from "crypto";
 import { BookingService } from "src/features/bookings/services/BookingService";
 import { CreateInvoiceInput } from "../input/CreateInvoiceInput";
 import { FindOneInvoiceInput } from "../input/FindOneInvoiceInput";
+import { PayInvoiceInput } from "../input/PayInvoiceInput";
 import { InvoiceRepository } from "../repositories/InvoiceRepository";
 
 @Injectable()
@@ -23,8 +24,19 @@ export class InvoiceService {
     }: CreateInvoiceInput,
     { include }: FindOneInvoiceInput,
   ) {
+    /**
+     * generate random invoice number
+     */
     const generatedInvoiceNumber = randomBytes(10).toString("hex");
+
+    /**
+     * get booking with booking id
+     */
     const booking = await this.bookingService.findOrFailById(bookingId);
+
+    /**
+     * get total amount of booking from each booking service
+     */
     const totalAmount = booking.additionalServiceItems.reduce(
       (acc, { price, quantity, discount }) =>
         acc + Number(price) * Number(quantity) * (1 - Number(discount)),
@@ -40,6 +52,33 @@ export class InvoiceService {
         bookingId,
         userId,
       },
+      { include },
+    );
+
+    return this.invoiceResource(invoice);
+  }
+
+  async findNotPaidInvoice(id: string) {
+    const invoice = await this.invoiceRepository.findNotPaidInvoice(id);
+
+    console.log(invoice);
+
+    if (!invoice)
+      throw new NotFoundException(
+        `Invoice with id ${id} not found or already paid`,
+      );
+
+    return this.invoiceResource(invoice);
+  }
+
+  async pay(
+    id: string,
+    { status, amount, paidBy, description }: PayInvoiceInput,
+    { include }: FindOneInvoiceInput,
+  ) {
+    const invoice = await this.invoiceRepository.pay(
+      id,
+      { status, amount, paidBy, description },
       { include },
     );
 
