@@ -61,7 +61,7 @@ export class BookingService {
     if (!booking)
       throw new NotFoundException(`booking with id ${id} not found`);
 
-    return booking;
+    return this.bookingResource(booking);
   }
 
   /**

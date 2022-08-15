@@ -102,6 +102,9 @@ export class BookingRepository {
         where: {
           id,
         },
+        include: {
+          additionalServiceItems: true,
+        },
       });
     } catch (error) {
       throw new InternalServerErrorException(IS_DEV ? error : "findById error");

@@ -100,12 +100,15 @@ export class BookingController {
      * merge incoming services with default basic service
      */
 
+    const basicItem = {
+      serviceId: defaultBasicService.id,
+      quantity: 1,
+      discount: 0,
+    };
+
     const addSItems = hasASI
-      ? [
-          ...additionalServiceItems,
-          { serviceId: defaultBasicService.id, quantity: 1, discount: 0 },
-        ]
-      : [{ serviceId: defaultBasicService.id, quantity: 1, discount: 0 }];
+      ? [...additionalServiceItems, basicItem]
+      : [basicItem];
 
     console.log(addSItems);
 

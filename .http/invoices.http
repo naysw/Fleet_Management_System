@@ -3,14 +3,15 @@
 
 @MODEL=invoices
 
-@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyMTE0NWRlYS1hNGM0LTQ1MzktOWY4OC04MDVkNWJmYjMyMGUiLCJpYXQiOjE2NjA1MzQyOTAsImV4cCI6MTY2MDU0MTQ5MH0.Uh9ZRbnBgz93jcWyogE-ZoZWfOzHvns37gka4uO-wOc
+@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNjFkZGViMC04MWE5LTRhMmMtODQ2MC01YTk5N2QwZjk3ZTQiLCJpYXQiOjE2NjA1NDAxNTcsImV4cCI6MTY2MDU0NzM1N30.KyQVBP38U5p0N3nB_aCPTeIihgiO4kub5HPYIysSNMI
 
 ### Create a new model
-POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}  
+POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
+    ?include=customer,booking,payment
 content-type: application/json
 Authorization: Bearer {{ACCESS_TOKEN}}
 
 {
-    "bookingId": "79be8b4c-9056-4fe4-840d-37b662192288",
-    "customerId": "fe205046-3dcc-4997-bca5-0ef252bc8e83"
+    "bookingId": "ec6208f5-7b0c-48e1-a70b-aebd817a0a7c",
+    "customerId": "f927f9df-1a8f-4ab4-8843-a8fa853615f4"
 }
