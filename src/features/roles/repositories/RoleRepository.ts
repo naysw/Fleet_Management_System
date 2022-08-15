@@ -6,6 +6,12 @@ import { PrismaService } from "src/services/PrismaService";
 export class RoleRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
+  /**
+   * find role by id
+   *
+   * @param id string
+   * @returns
+   */
   async findById(id: string) {
     try {
       return await this.prismaService.role.findUnique({

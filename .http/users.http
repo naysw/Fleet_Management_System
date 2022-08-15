@@ -2,11 +2,11 @@
 @API_VERSION=v1
 @MODEL=users
 
-@TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NzY3ZDQwMS1kZDY4LTQwNDgtYWJiZi02YTY1NjUwZGI5OTQiLCJpYXQiOjE2NjA0OTgwMDEsImV4cCI6MTY2MDUwNTIwMX0.1K_vGYH3Wr6gecMraLOGK30nNQELozwaN6Lc91QJw_g
+@TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNTNjYmRmMy1jMThlLTQzMjUtYmI3My1jMDgyMTBhNmRlN2YiLCJpYXQiOjE2NjA1NTcxMjQsImV4cCI6MTY2MDU2NDMyNH0.c-zzwRJyeKN96RacbL-el9m8UT8kawZpbIfFgKyhsnY
 
 ### find many
 GET {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
-    ?take=2&skip=0&include=roles
+    ?take=20&skip=0&include=roles
 content-type: application/json
 authorization: Bearer {{TOKEN}}
 

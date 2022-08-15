@@ -5,13 +5,13 @@ import { RoleRepository } from "../repositories/RoleRepository";
 export class RoleService {
   constructor(private readonly roleRepository: RoleRepository) {}
 
-  async existsRoleIds(ids: string[]) {
-    for (const id of ids) {
-      await this.findOrFailById(id);
-    }
-  }
-
-  async findOrFailById(id: string) {
+  /**
+   * find by id or fail
+   *
+   * @param id string
+   * @returns
+   */
+  async findByIdOrFail(id: string) {
     const role = await this.roleRepository.findById(id);
 
     if (!role)

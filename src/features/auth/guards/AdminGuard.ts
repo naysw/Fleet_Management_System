@@ -4,6 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
+import { Role } from "@prisma/client";
 import { Observable } from "rxjs";
 
 @Injectable()
@@ -13,7 +14,9 @@ export class AdminGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const { user } = context.switchToHttp().getRequest<{ user: any }>();
 
-    if (!user) throw new UnauthorizedException();
+    console.log(user);
+
+    if (!user && !user.roles.length) throw new UnauthorizedException();
 
     /**
      * check user has role
@@ -22,7 +25,7 @@ export class AdminGuard implements CanActivate {
      * @param roleName string
      * @returns
      */
-    function hasRole(roles: { name: string }[], roleName: string) {
+    function hasRole(roles: Role[], roleName: string) {
       return roles.some((r) => r.name === roleName);
     }
 

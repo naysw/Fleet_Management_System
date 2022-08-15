@@ -40,14 +40,20 @@ import { UserService } from "../services/UserService";
   path: "/api/users",
   version: "1",
 })
-@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly roleService: RoleService,
   ) {}
 
+  /**
+   * find many user
+   *
+   * @param param0 FindManyUserQueryInput
+   * @returns Promise<ResponseResource<User>>
+   */
   @Get()
+  @UseGuards(JwtAuthGuard)
   async findMany(
     @Query(new JoiValidationPipe(findManyUserQueryInputSchema))
     {
@@ -59,7 +65,7 @@ export class UserController {
       orderBy,
       filter,
     }: FindManyUserQueryInput,
-  ) {
+  ): Promise<ResponseResource<any>> {
     const users = await this.userService.findMany({
       take,
       skip,
@@ -73,8 +79,15 @@ export class UserController {
     return new ResponseResource(users);
   }
 
+  /**
+   * ceate user
+   *
+   * @param param0 CreateUserInput
+   * @param param1 FindOneUserQueryInput
+   * @returns
+   */
   @Post()
-  @UseGuards(AdminGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async create(
     @Body(new JoiValidationPipe(createUserInputSchema))
     {
@@ -92,7 +105,10 @@ export class UserController {
     if (isUserNameExist)
       throw new ConflictException(`Username ${username} is already taken`);
 
-    if (roleIds) await this.roleService.existsRoleIds(roleIds);
+    if (roleIds)
+      for (const roleId of roleIds) {
+        await this.roleService.findByIdOrFail(roleId);
+      }
 
     const user = await this.userService.create(
       {
@@ -115,16 +131,13 @@ export class UserController {
    * @returns
    */
   @Get("/me")
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async findMe(@Req() req: any) {
     return new ResponseResource({
       id: req.user.id,
-      firstName: req.user.firstName,
-      lastName: req.user.lastName,
+      name: req.user.name,
       email: req.user.email,
-      phone: req.user.phone,
-      emailVerifiedAt: req.user.emailVerifiedAt,
-      phoneVerifiedAt: req.user.phoneVerifiedAt,
+      username: req.user.username,
       roles: req.user.roles,
       createdAt: req.user.createdAt,
       updatedAt: req.user.updatedAt,
@@ -139,7 +152,7 @@ export class UserController {
    * @returns
    */
   @Patch(":id")
-  @UseGuards(AdminGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async update(
     @Param("id", new ParseUUIDPipe()) id: string,
     @Body(new JoiValidationPipe(updateUserInputSchema))
@@ -167,7 +180,7 @@ export class UserController {
    * @return
    */
   @Delete(":id")
-  @UseGuards(AdminGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async delete(@Param("id", new ParseUUIDPipe()) id: string) {
     await this.userService.findByIdOrFail(id);
     await this.userService.deleteById(id);

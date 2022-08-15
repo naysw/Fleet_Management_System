@@ -77,10 +77,7 @@ export class UserService {
    * @returns Promise<User>
    */
   async findByIdOrFail(id: string): Promise<any> {
-    const user = await this.userRepository.findUnique(
-      { id },
-      { include: "roles" },
-    );
+    const user = await this.userRepository.findUnique({ id }, {});
 
     if (!user)
       throw new NotFoundException(

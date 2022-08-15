@@ -73,9 +73,9 @@ export class UserRepository {
       return await this.prismaService.user.findUnique({
         where: input,
         include: {
-          roles: registerInclude(include, "roles")
-            ? { select: { role: true } }
-            : false,
+          roles: {
+            include: { role: true },
+          },
         },
       });
     } catch (error) {

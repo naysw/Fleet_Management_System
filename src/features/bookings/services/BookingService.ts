@@ -17,6 +17,13 @@ export class BookingService {
     private readonly serviceService: ServiceService,
   ) {}
 
+  /**
+   * create one booking from given input data
+   *
+   * @param param0 CreateBookingBodyInput
+   * @param param1 FindOneBookingQueryInput
+   * @returns
+   */
   async create(
     {
       vehicleId,
@@ -76,6 +83,12 @@ export class BookingService {
     return hasLength ? [...new Set(serviceIds)] : [];
   }
 
+  /**
+   * map bookding resource
+   *
+   * @param param0 Booking
+   * @returns Booking
+   */
   private bookingResource({
     id,
     from,
@@ -101,6 +114,7 @@ export class BookingService {
       additionalServiceItems,
       customer,
       vehicle,
+      vehicleId,
       parkingSlotId,
     };
   }
