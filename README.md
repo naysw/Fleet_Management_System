@@ -5,13 +5,13 @@
 - [Installation and Setup](#installation-and-setup)
 - [Get Token](#get-token)
 - [Create a Booking](#create-a-booking)
-- [Create Vehicle API](#create-a-vehicle-api)
-- [Create Booking API](#create-a-booking-api)
-- [Generate Invoice for Booking](#generate-invoice-for-booking)
-- [Pay Payment](#pay-payment)
+- [Register Booking](#register-booking)
+- [Generate Invoice for Booking](#generate-invoice-for-ooking)
+- [Make Payment](#make-payment)
 - [Customer REST Api](#customer-rest-api)
 - [Service REST Api](#service-rest-api)
 - [User REST Api](#user-rest-api)
+- [Vehicle REST Api](#vehicle-rest-api)
 
 ## Installation and Setup
 
