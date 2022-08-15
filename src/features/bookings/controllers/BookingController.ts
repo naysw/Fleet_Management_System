@@ -10,6 +10,10 @@ import {
 import { AdditionalServiceItem } from "@prisma/client";
 import { JwtAuthGuard } from "src/features/auth/guards/JwtAuthGuard";
 import { CustomerService } from "src/features/customers/services/CustomerService";
+import {
+  BASIC_CAR_PARKING_FEES,
+  DAILY,
+} from "src/features/services/config/constants";
 import { ServiceService } from "src/features/services/services/ServiceService";
 import { VehicleService } from "src/features/vehicles/services/VehicleService";
 import { JoiValidationPipe } from "src/pipe/JoiValidationPipe";
@@ -114,7 +118,7 @@ export class BookingController {
      */
     const basicItem = {
       serviceId: defaultBasicService.id,
-      quantity: 1,
+      quantity: BASIC_CAR_PARKING_FEES === DAILY ? duration * 1 : 1,
       discount: 0,
     };
 
