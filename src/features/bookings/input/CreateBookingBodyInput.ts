@@ -1,5 +1,11 @@
 import Joi from "joi";
 
+interface AdditionalServiceItems {
+  serviceId: string;
+  quantity: number;
+  discount?: number;
+}
+
 export interface CreateBookingBodyInput {
   vehicleId: string;
   parkingSlotId?: string;
@@ -8,7 +14,7 @@ export interface CreateBookingBodyInput {
   to?: string;
   duration?: number;
   notes?: string;
-  serviceIds?: string[];
+  additionalServiceItems: AdditionalServiceItems[];
 }
 
 export const createBookingBodyInputSchema = Joi.object<CreateBookingBodyInput>({
@@ -27,7 +33,11 @@ export const createBookingBodyInputSchema = Joi.object<CreateBookingBodyInput>({
   to: Joi.date().greater(Joi.ref("from")).required(),
   duration: Joi.number().greater(0).max(30).required(),
   notes: Joi.string().max(1500).trim(),
-  serviceIds: Joi.array()
-    .items(Joi.string().uuid({ version: "uuidv4" }).max(255).trim())
-    .unique(),
+  additionalServiceItems: Joi.array().items(
+    Joi.object({
+      serviceId: Joi.string().uuid({ version: "uuidv4" }).trim(),
+      quantity: Joi.number().greater(0).required(),
+      discount: Joi.number(),
+    }),
+  ),
 });

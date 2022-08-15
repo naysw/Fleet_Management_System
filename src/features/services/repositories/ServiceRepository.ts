@@ -1,11 +1,11 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { Service } from '@prisma/client';
-import { DEFAULT_TAKE, IS_DEV } from 'src/config/constants';
-import { PrismaService } from 'src/services/PrismaService';
-import { registerInclude, registerOrderBy } from 'src/utils/queryBuilder';
-import { CreateServiceBodyInput } from '../input/CreateServiceBodyInput';
-import { FindManyServiceQueryInput } from '../input/FindManyServiceQueryInput';
-import { UpdateServiceBodyInput } from '../input/UpdateServiceBodyInput';
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { Service } from "@prisma/client";
+import { DEFAULT_TAKE, IS_DEV } from "src/config/constants";
+import { PrismaService } from "src/services/PrismaService";
+import { registerOrderBy } from "src/utils/queryBuilder";
+import { CreateServiceBodyInput } from "../input/CreateServiceBodyInput";
+import { FindManyServiceQueryInput } from "../input/FindManyServiceQueryInput";
+import { UpdateServiceBodyInput } from "../input/UpdateServiceBodyInput";
 
 @Injectable()
 export class ServiceRepository {
@@ -25,13 +25,13 @@ export class ServiceRepository {
         take: Number(take) || DEFAULT_TAKE,
         skip: Number(skip) || undefined,
         orderBy: registerOrderBy(orderBy),
-        include: {
-          bookings: registerInclude(include, 'bookings'),
-        },
+        // include: {
+        //   additionalServiceItems: registerInclude(include, "bookings"),
+        // },
       });
     } catch (error) {
       throw new InternalServerErrorException(
-        IS_DEV ? error : 'findMany services error',
+        IS_DEV ? error : "findMany services error",
       );
     }
   }
@@ -45,7 +45,7 @@ export class ServiceRepository {
       });
     } catch (error) {
       throw new InternalServerErrorException(
-        IS_DEV ? error : 'findById service error',
+        IS_DEV ? error : "findById service error",
       );
     }
   }
@@ -61,7 +61,7 @@ export class ServiceRepository {
       });
     } catch (error) {
       throw new InternalServerErrorException(
-        IS_DEV ? error : 'create service error',
+        IS_DEV ? error : "create service error",
       );
     }
   }
@@ -83,7 +83,7 @@ export class ServiceRepository {
       });
     } catch (error) {
       throw new InternalServerErrorException(
-        IS_DEV ? error : 'update service error',
+        IS_DEV ? error : "update service error",
       );
     }
   }
@@ -98,6 +98,25 @@ export class ServiceRepository {
     } catch (error) {
       throw new InternalServerErrorException(
         IS_DEV ? error : `Error deleting service with id ${id}`,
+      );
+    }
+  }
+
+  /**
+   * get basic hardcode service
+   *
+   * @returns
+   */
+  async getBasicService() {
+    try {
+      return await this.prismaService.service.findFirst({
+        where: {
+          name: "Basic",
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        IS_DEV ? error : `Error deleting service`,
       );
     }
   }

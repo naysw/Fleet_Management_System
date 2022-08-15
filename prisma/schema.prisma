@@ -45,8 +45,6 @@ model Service {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-
-  bookings ServicesOnBooking[]
 }
 
 model Booking {
@@ -66,8 +64,23 @@ model Booking {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  services ServicesOnBooking[]
-  invoices Invoice[]
+  invoices               Invoice[]
+  additionalServiceItems AdditionalServiceItem[]
+}
+
+model AdditionalServiceItem {
+  id String @id @default(uuid())
+
+  name     String
+  price    Float? @default(0)
+  quantity Int?   @default(1)
+  discount Int?   @default(0)
+
+  bookingId String  @unique
+  booking   Booking @relation(fields: [bookingId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model Category {
@@ -104,21 +117,11 @@ model ParkingSlot {
   bookings Booking[]
 }
 
-model ServicesOnBooking {
-  bookingId String
-  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  serviceId String
-  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  @@id([bookingId, serviceId])
-}
-
 model Invoice {
   id            String @id @default(uuid())
   invoiceNumber String @unique @default(cuid())
   status        String @default("PENDING")
+  amount        Float
 
   customerId String
   customer   Customer @relation(fields: [customerId], references: [id])
@@ -137,7 +140,7 @@ model Invoice {
 
 model Payment {
   id               String  @id @default(uuid())
-  amount           Float
+  amount           Float   @default(0)
   status           String  @default("PENDING")
   customProperties Json?
   paidBy           String?

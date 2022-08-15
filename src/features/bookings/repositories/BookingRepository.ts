@@ -1,4 +1,5 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { AdditionalServiceItem } from "@prisma/client";
 import { IS_DEV } from "src/config/constants";
 import { PrismaService } from "src/services/PrismaService";
 import { registerInclude } from "src/utils/queryBuilder";
@@ -15,7 +16,7 @@ export class BookingRepository {
    * @param param0 CreateBookingBodyInput
    * @returns
    */
-  async createOne(
+  async create(
     {
       vehicleId,
       parkingSlotId,
@@ -24,10 +25,14 @@ export class BookingRepository {
       to,
       duration,
       notes,
-      serviceIds,
-    }: CreateBookingBodyInput,
+      additionalServiceItems,
+    }: Omit<CreateBookingBodyInput, "additionalServiceItems"> & {
+      additionalServiceItems: Partial<AdditionalServiceItem>[];
+    },
     { include }: FindOneBookingQueryInput,
   ) {
+    console.log("additionalServiceItems", additionalServiceItems);
+
     try {
       return await this.prismaService.booking.create({
         data: {
@@ -56,21 +61,23 @@ export class BookingRepository {
           to,
           duration,
           notes,
-          services:
-            serviceIds && serviceIds.length > 0
+          additionalServiceItems:
+            additionalServiceItems && additionalServiceItems.length > 0
               ? {
-                  create: serviceIds.map((serviceId) => ({
-                    service: {
-                      connect: { id: serviceId },
-                    },
+                  create: additionalServiceItems.map((item) => ({
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    discount: item.discount,
                   })),
                 }
               : undefined,
         },
         include: {
-          services: registerInclude(include, "services")
-            ? { select: { service: true } }
-            : false,
+          additionalServiceItems: registerInclude(
+            include,
+            "additionalServiceItems",
+          ),
           customer: registerInclude(include, "customer"),
           vehicle: registerInclude(include, "vehicle"),
           parkingSlot: registerInclude(include, "parkingSlot"),
@@ -78,8 +85,26 @@ export class BookingRepository {
       });
     } catch (error) {
       throw new InternalServerErrorException(
-        IS_DEV ? error : "create booking failed",
+        IS_DEV ? JSON.stringify(error) : "create booking failed",
       );
+    }
+  }
+
+  /**
+   * find by id
+   *
+   * @param id string
+   * @returns
+   */
+  async findById(id: string) {
+    try {
+      return await this.prismaService.booking.findUnique({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(IS_DEV ? error : "findById error");
     }
   }
 }

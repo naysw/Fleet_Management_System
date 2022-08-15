@@ -87,4 +87,14 @@ export class ServiceService {
       await this.findOrFailById(id);
     }
   }
+
+  /**
+   * get default basic service from database
+   * we should get this defualt service from setting table for dynamic,
+   * for now just hardcode this service
+   * @returns Promise<Service>
+   */
+  async getDefaultBasicService(): Promise<Service> {
+    return await this.serviceRepository.getBasicService();
+  }
 }

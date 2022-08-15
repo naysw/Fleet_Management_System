@@ -1,5 +1,10 @@
-import { Injectable } from "@nestjs/common";
-import { Booking, Customer, Vehicle } from "@prisma/client";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  AdditionalServiceItem,
+  Booking,
+  Customer,
+  Vehicle,
+} from "@prisma/client";
 import { ServiceService } from "src/features/services/services/ServiceService";
 import { CreateBookingBodyInput } from "../input/CreateBookingBodyInput";
 import { FindOneBookingQueryInput } from "../input/FindOneBookingQueryInput";
@@ -12,7 +17,7 @@ export class BookingService {
     private readonly serviceService: ServiceService,
   ) {}
 
-  async createOne(
+  async create(
     {
       vehicleId,
       parkingSlotId,
@@ -21,11 +26,13 @@ export class BookingService {
       to,
       duration,
       notes,
-      serviceIds,
-    }: CreateBookingBodyInput,
+      additionalServiceItems,
+    }: Omit<CreateBookingBodyInput, "additionalServiceItems"> & {
+      additionalServiceItems: Partial<AdditionalServiceItem>[];
+    },
     { include }: FindOneBookingQueryInput,
   ) {
-    const booking = await this.bookingRepository.createOne(
+    const booking = await this.bookingRepository.create(
       {
         vehicleId,
         parkingSlotId,
@@ -34,12 +41,27 @@ export class BookingService {
         to,
         duration,
         notes,
-        serviceIds,
+        additionalServiceItems,
       },
       { include },
     );
 
     return this.bookingResource(booking);
+  }
+
+  /**
+   * find or fail by id
+   *
+   * @param id string
+   * @returns
+   */
+  async findOrFailById(id: string) {
+    const booking = await this.bookingRepository.findById(id);
+
+    if (!booking)
+      throw new NotFoundException(`booking with id ${id} not found`);
+
+    return booking;
   }
 
   /**
@@ -51,17 +73,7 @@ export class BookingService {
   getServiceIds(serviceIds: string[]): string[] {
     const hasLength = serviceIds && serviceIds.length > 0;
 
-    /**
-     * this is hard coded basic service id
-     * we will need to parse basic service id from setting database table that define as default service id
-     *
-     * @example
-     */
-    const basicServiceId = "e9ca5647-fb16-46e8-b23f-ff63be5a6352";
-
-    return hasLength
-      ? [...new Set(serviceIds.concat(basicServiceId))]
-      : [basicServiceId];
+    return hasLength ? [...new Set(serviceIds)] : [];
   }
 
   private bookingResource({
@@ -71,21 +83,22 @@ export class BookingService {
     notes,
     status,
     customer,
-    services,
+    additionalServiceItems,
     vehicle,
     vehicleId,
     parkingSlotId,
-  }: Booking & { customer?: Customer; services?: any[]; vehicle?: Vehicle }) {
+  }: Booking & {
+    customer?: Customer;
+    additionalServiceItems?: any[];
+    vehicle?: Vehicle;
+  }) {
     return {
       id,
       from,
       to,
       notes,
       status,
-      services:
-        services && Array.isArray(services)
-          ? services.map((service) => service.service)
-          : undefined,
+      additionalServiceItems,
       customer,
       vehicle,
       parkingSlotId,

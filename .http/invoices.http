@@ -1,0 +1,16 @@
+@BASE_URL=http://localhost:3002
+@API_VERSION=v1
+
+@MODEL=invoices
+
+@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyMTE0NWRlYS1hNGM0LTQ1MzktOWY4OC04MDVkNWJmYjMyMGUiLCJpYXQiOjE2NjA1MzQyOTAsImV4cCI6MTY2MDU0MTQ5MH0.Uh9ZRbnBgz93jcWyogE-ZoZWfOzHvns37gka4uO-wOc
+
+### Create a new model
+POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}  
+content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+{
+    "bookingId": "79be8b4c-9056-4fe4-840d-37b662192288",
+    "customerId": "fe205046-3dcc-4997-bca5-0ef252bc8e83"
+}

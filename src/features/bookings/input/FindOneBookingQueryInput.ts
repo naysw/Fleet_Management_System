@@ -10,6 +10,11 @@ export const findOneBookingQueryInputSchema =
       .max(255)
       .trim()
       .custom(
-        allowedInclude(["services", "customer", "vehicle", "parkingSlot"]),
+        allowedInclude([
+          "additionalServiceItems",
+          "customer",
+          "vehicle",
+          "parkingSlot",
+        ]),
       ),
   });

@@ -7,6 +7,7 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
+import { AdditionalServiceItem } from "@prisma/client";
 import { JwtAuthGuard } from "src/features/auth/guards/JwtAuthGuard";
 import { CustomerService } from "src/features/customers/services/CustomerService";
 import { ServiceService } from "src/features/services/services/ServiceService";
@@ -59,17 +60,80 @@ export class BookingController {
       to,
       duration,
       notes,
-      serviceIds,
+      additionalServiceItems,
     }: CreateBookingBodyInput,
     @Query(new JoiValidationPipe(findOneBookingQueryInputSchema))
     { include }: FindOneBookingQueryInput,
   ) {
+    /**
+     * validate incoming customerId is whether exist or not
+     */
     await this.customerService.findOrFailById(customerId);
-    await this.vehicleService.findOrFailById(vehicleId);
-    if (serviceIds && serviceIds.length > 0)
-      await this.serviceService.existsServiceIds(serviceIds);
 
-    const booking = await this.bookingService.createOne(
+    /**
+     * validate incoming vehicleId is whether exist or not
+     */
+    await this.vehicleService.findOrFailById(vehicleId);
+
+    const hasASI =
+      additionalServiceItems &&
+      Array.isArray(additionalServiceItems) &&
+      additionalServiceItems.length > 0;
+
+    /**
+     * validate incoming serviceId is whether exist or not
+     */
+    if (hasASI)
+      await this.serviceService.existsServiceIds(
+        additionalServiceItems.map((item) => item.serviceId),
+      );
+
+    /**
+     * get default basic service
+     */
+    const defaultBasicService =
+      await this.serviceService.getDefaultBasicService();
+
+    console.log(defaultBasicService);
+
+    /**
+     * merge incoming services with default basic service
+     */
+
+    const addSItems = hasASI
+      ? [
+          ...additionalServiceItems,
+          { serviceId: defaultBasicService.id, quantity: 1, discount: 0 },
+        ]
+      : [{ serviceId: defaultBasicService.id, quantity: 1, discount: 0 }];
+
+    console.log(addSItems);
+
+    /**
+     * assign empty array to additionalServiceItems
+     */
+    let asi: Pick<
+      AdditionalServiceItem,
+      "name" | "quantity" | "price" | "discount"
+    >[] = [];
+
+    /**
+     * loop through additionalServiceItems and assign to asi
+     */
+    for (const { serviceId, quantity, discount } of addSItems) {
+      const service = await this.serviceService.findOrFailById(serviceId);
+
+      asi.push({
+        name: service.name,
+        quantity,
+        price: service.price * quantity,
+        discount,
+      });
+    }
+
+    console.log("asi", asi);
+
+    const booking = await this.bookingService.create(
       {
         vehicleId,
         parkingSlotId,
@@ -78,7 +142,7 @@ export class BookingController {
         to,
         duration,
         notes,
-        serviceIds: this.bookingService.getServiceIds(serviceIds),
+        additionalServiceItems: asi,
       },
       { include },
     );

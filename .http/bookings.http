@@ -3,28 +3,35 @@
 
 @MODEL=bookings
 
+@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNjFkZGViMC04MWE5LTRhMmMtODQ2MC01YTk5N2QwZjk3ZTQiLCJpYXQiOjE2NjA1NDAxNTcsImV4cCI6MTY2MDU0NzM1N30.KyQVBP38U5p0N3nB_aCPTeIihgiO4kub5HPYIysSNMI
+
+
 ### find many
 GET {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
-    ?take=5&skip=0&include=services,customer&orderBy=createdAt
+    ?take=5&skip=0&include=additionalServiceItems,customer&orderBy=createdAt
 content-type: application/json
+authorization: Bearer {{ACCESS_TOKEN}}
 
 
 ### Create a new model
 POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
-    # ?include=services,customer,vehicle    
+    ?include=additionalServiceItems,customer,vehicle    
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 {
-    "customerId": "da574263-10b0-4aa0-adf7-e2408cca397c",
-    "vehicleId": "b73fa6bb-1c60-40dc-a7a1-a89fa91581f6",
+    "customerId": "f927f9df-1a8f-4ab4-8843-a8fa853615f4",
+    "vehicleId": "fd908d14-7b83-49de-bfec-874348283ef7",
     "from": "2022-07-13T17:58:37.493Z",
     "to": "2022-08-13T17:58:37.493Z",
     "duration": 30,
     "notes": "Do not forget to bring your keys",
-    "serviceIds": [
-        // basic service id
-        "b7e8ba53-96d7-43e9-8090-87108d1e72ec",
-        "a0c8f602-a278-489a-ad3d-1b3b4112cbdd"
+    "additionalServiceItems": [
+        # {
+        #     "serviceId": "ff4636a6-c80e-4094-8d38-c0e3682f71a5",
+        #     "quantity": 5,
+        #     "discount": 0
+        # }
     ]
 }
 
