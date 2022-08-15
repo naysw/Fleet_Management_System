@@ -112,7 +112,6 @@ export class BookingController {
     /**
      * merge incoming services with default basic service
      */
-
     const basicItem = {
       serviceId: defaultBasicService.id,
       quantity: 1,

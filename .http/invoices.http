@@ -3,7 +3,7 @@
 
 @MODEL=invoices
 
-@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNTNjYmRmMy1jMThlLTQzMjUtYmI3My1jMDgyMTBhNmRlN2YiLCJpYXQiOjE2NjA1NTY0MTUsImV4cCI6MTY2MDU2MzYxNX0.yDGyG2Ej-2njAF-vA83x3akFe3aIpSy9sEDMJkOclTE
+@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNTNjYmRmMy1jMThlLTQzMjUtYmI3My1jMDgyMTBhNmRlN2YiLCJpYXQiOjE2NjA1NjY2MTIsImV4cCI6MTY2MDU3MzgxMn0.Bd4GuFgDb8CORMFjG8UG8n--t5fi0vFXbc8JWqOWO1o
 
 ### Create a new model
 POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
@@ -17,7 +17,7 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 }
 
 ### pay invoice
-PATCH  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/d947aa89-02cb-4291-80ca-73c8e72b2914/pay
+PATCH  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/acb815b4-8faf-45ce-a79d-9892c6d5c497/pay
     ?include=customer,booking,payment
 content-type: application/json
 Authorization: Bearer {{ACCESS_TOKEN}}

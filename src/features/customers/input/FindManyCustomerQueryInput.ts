@@ -1,6 +1,6 @@
-import Joi from 'joi';
-import { BaseQueryInput } from 'src/input/BaseQueryInput';
-import { allowedInclude, allowedOrderBy } from 'src/utils/customValidation';
+import Joi from "joi";
+import { BaseQueryInput } from "src/input/BaseQueryInput";
+import { allowedInclude, allowedOrderBy } from "src/utils/customValidation";
 
 export interface FindManyCustomerQueryInput extends BaseQueryInput {}
 
@@ -11,9 +11,9 @@ export const findManyServiceQueryInputSchema =
     include: Joi.string()
       .max(255)
       .trim()
-      .custom(allowedInclude(['bookings'])),
+      .custom(allowedInclude(["bookings"])),
     orderBy: Joi.string()
       .trim()
-      .custom(allowedOrderBy(['createdAt'])),
+      .custom(allowedOrderBy(["createdAt"])),
     keyword: Joi.string().max(255).trim(),
   });

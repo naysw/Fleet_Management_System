@@ -13,6 +13,13 @@ export class InvoiceService {
     private readonly bookingService: BookingService,
   ) {}
 
+  /**
+   * create invoice from given data
+   *
+   * @param param0 CreateInvoiceInput
+   * @param param1 FindOneInvoiceInput
+   * @returns
+   */
   async create(
     {
       invoiceNumber,
@@ -58,6 +65,13 @@ export class InvoiceService {
     return this.invoiceResource(invoice);
   }
 
+  /**
+   * find not paid invoice by id
+   * not padi meaning status = "PENDING"
+   *
+   * @param id string
+   * @returns Promise<Invoice>
+   */
   async findNotPaidInvoice(id: string) {
     const invoice = await this.invoiceRepository.findNotPaidInvoice(id);
 
@@ -71,6 +85,14 @@ export class InvoiceService {
     return this.invoiceResource(invoice);
   }
 
+  /**
+   * make payment for specify invoice
+   *
+   * @param id string
+   * @param param1 PayInvoiceInput
+   * @param param2 FindOneInvoiceInput
+   * @returns Invoice
+   */
   async pay(
     id: string,
     { status, amount, paidBy, description }: PayInvoiceInput,

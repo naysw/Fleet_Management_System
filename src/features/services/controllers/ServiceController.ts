@@ -11,6 +11,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { Service } from "@prisma/client";
+import { AdminGuard } from "src/features/auth/guards/AdminGuard";
 import { JwtAuthGuard } from "src/features/auth/guards/JwtAuthGuard";
 import { findManyServiceQueryInputSchema } from "src/features/customers/input/FindManyCustomerQueryInput";
 import { JoiValidationPipe } from "src/pipe/JoiValidationPipe";
@@ -34,6 +35,12 @@ import { ServiceService } from "../services/ServiceService";
 export class ServiceController {
   constructor(private readonly serviceService: ServiceService) {}
 
+  /**
+   * find many service
+   *
+   * @param param0 FindManyServiceQueryInput
+   * @returns
+   */
   @Get()
   async findMany(
     @Query(new JoiValidationPipe(findManyServiceQueryInputSchema))
@@ -61,6 +68,7 @@ export class ServiceController {
   }
 
   @Post()
+  @UseGuards(AdminGuard)
   async createService(
     @Body(new JoiValidationPipe(createServiceBodyInputSchema))
     { name, price, description }: CreateServiceBodyInput,
@@ -77,6 +85,7 @@ export class ServiceController {
   }
 
   @Patch(":id")
+  @UseGuards(AdminGuard)
   async updateService(
     @Param("id", new ParseUUIDPipe()) id: string,
     @Body(new JoiValidationPipe(updateServiceBodyInputSchema))
@@ -102,6 +111,7 @@ export class ServiceController {
    * @returns
    */
   @Delete(":id")
+  @UseGuards(AdminGuard)
   async deleteService(
     @Param("id", new ParseUUIDPipe()) id: string,
   ): Promise<ResponseResource<any>> {

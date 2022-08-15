@@ -11,6 +11,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { Vehicle } from "@prisma/client";
+import { AdminGuard } from "src/features/auth/guards/AdminGuard";
 import { JwtAuthGuard } from "src/features/auth/guards/JwtAuthGuard";
 import { CustomerService } from "src/features/customers/services/CustomerService";
 import { JoiValidationPipe } from "src/pipe/JoiValidationPipe";
@@ -71,6 +72,7 @@ export class VehicleController {
   }
 
   @Post()
+  @UseGuards(AdminGuard)
   async create(
     @Body(new JoiValidationPipe(createVehicleBodyInputSchema))
     {
@@ -102,6 +104,7 @@ export class VehicleController {
   }
 
   @Patch(":id")
+  @UseGuards(AdminGuard)
   async update(
     @Param("id", new ParseUUIDPipe()) id: string,
     @Body(new JoiValidationPipe(updateServiceBodyInputSchema))
@@ -142,6 +145,7 @@ export class VehicleController {
    * @returns
    */
   @Delete(":id")
+  @UseGuards(AdminGuard)
   async deleteById(
     @Param("id", new ParseUUIDPipe()) id: string,
   ): Promise<ResponseResource<any>> {

@@ -9,6 +9,7 @@ import {
   Req,
   UseGuards,
 } from "@nestjs/common";
+import { AdminGuard } from "src/features/auth/guards/AdminGuard";
 import { JwtAuthGuard } from "src/features/auth/guards/JwtAuthGuard";
 import { BookingService } from "src/features/bookings/services/BookingService";
 import { CustomerService } from "src/features/customers/services/CustomerService";
@@ -42,6 +43,14 @@ export class InvoiceController {
     private readonly invoiceService: InvoiceService,
   ) {}
 
+  /**
+   * create one invoice
+   *
+   * @param param0 CreateInvoiceInput
+   * @param req Request
+   * @param param2 FindOneInvoiceInput
+   * @returns Promise<ResponseResource<Invoice>>
+   */
   @Post()
   async create(
     @Body(new JoiValidationPipe(createInvoiceInputSchema))
@@ -53,7 +62,7 @@ export class InvoiceController {
     @Req() req: any,
     @Query(new JoiValidationPipe(findOneInvoiceQueryInputSchema))
     { include }: FindOneInvoiceInput,
-  ) {
+  ): Promise<ResponseResource<any>> {
     const customer = await this.customerService.findOrFailById(customerId);
     await this.bookingService.findOrFailById(bookingId);
 
@@ -67,6 +76,10 @@ export class InvoiceController {
       { include },
     );
 
+    /**
+     * we will read html template and send with beauty mail,
+     * for now let it be eargly :))
+     */
     if (customer.email) {
       new Mail(
         "test@test.com",
@@ -83,7 +96,16 @@ export class InvoiceController {
     return new ResponseResource(invoice);
   }
 
+  /**
+   * make payment for invoice
+   *
+   * @param id string
+   * @param param1 PayInvoiceInput
+   * @param param2 FindOneInvoiceInput
+   * @returns Promise<ResponseResource<Invoice>>
+   */
   @Patch(":id/pay")
+  @UseGuards(AdminGuard)
   async pay(
     @Param("id", new ParseUUIDPipe()) id: string,
     @Body(new JoiValidationPipe(payInvoiceInputSchema))
@@ -99,6 +121,10 @@ export class InvoiceController {
       { include },
     );
 
+    /**
+     * we will read html template and send with beauty mail,
+     * for now let it be eargly :))
+     */
     if (invoice.customer?.email) {
       new Mail(
         "test@test.com",

@@ -3,7 +3,7 @@
 
 @MODEL=services
 
-@ACCESS_TOKEN=
+@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNTNjYmRmMy1jMThlLTQzMjUtYmI3My1jMDgyMTBhNmRlN2YiLCJpYXQiOjE2NjA1NjY2MTIsImV4cCI6MTY2MDU3MzgxMn0.Bd4GuFgDb8CORMFjG8UG8n--t5fi0vFXbc8JWqOWO1o
 
 ### find many model
 GET {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
@@ -16,6 +16,7 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 ### Create a new model
 POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}  
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 {
     "name": "New Service",
@@ -26,9 +27,10 @@ content-type: application/json
 
 
 ### update model from given id
-PATCH {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/c9642146-556a-4133-8756-20d04c1e313e
+PATCH {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/d1b7c1d3-d2ef-4fa6-aad7-99c23eb070fd
     ?include=bookings    
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 {
     "name": "New Service Update",
@@ -38,5 +40,6 @@ content-type: application/json
 
 
 ### delete model from given id
-DELETE  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/c9642146-556a-4133-8756-20d04c1e313e
+DELETE  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/25ffe2e5-ab7b-4d45-9e65-5b586eccda1e
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}

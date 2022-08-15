@@ -95,6 +95,11 @@ export class ServiceService {
    * @returns Promise<Service>
    */
   async getDefaultBasicService(): Promise<Service> {
-    return await this.serviceRepository.getBasicService();
+    const service = await this.serviceRepository.getBasicService();
+
+    if (!service)
+      throw new NotFoundException("Default basic not found or deleted");
+
+    return service;
   }
 }

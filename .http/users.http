@@ -2,7 +2,7 @@
 @API_VERSION=v1
 @MODEL=users
 
-@TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNTNjYmRmMy1jMThlLTQzMjUtYmI3My1jMDgyMTBhNmRlN2YiLCJpYXQiOjE2NjA1NTcxMjQsImV4cCI6MTY2MDU2NDMyNH0.c-zzwRJyeKN96RacbL-el9m8UT8kawZpbIfFgKyhsnY
+@TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNTNjYmRmMy1jMThlLTQzMjUtYmI3My1jMDgyMTBhNmRlN2YiLCJpYXQiOjE2NjA1NjY5NjAsImV4cCI6MTY2MDU3NDE2MH0.Ir0_KZvqTBrJb8nFJ4AS6iRFemsMJw3juyHZnNynHI0
 
 ### find many
 GET {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
@@ -19,7 +19,7 @@ authorization: Bearer {{TOKEN}}
 
 {
     "name": "John Doe",
-    "username": "assdfdfsd",
+    "username": "sadfds",
     "password": "password",
     "confirmPassword": "password",
     "roleIds": [
