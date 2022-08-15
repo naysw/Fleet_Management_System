@@ -3,7 +3,7 @@
 
 @MODEL=bookings
 
-@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNTNjYmRmMy1jMThlLTQzMjUtYmI3My1jMDgyMTBhNmRlN2YiLCJpYXQiOjE2NjA1NjY5NjAsImV4cCI6MTY2MDU3NDE2MH0.Ir0_KZvqTBrJb8nFJ4AS6iRFemsMJw3juyHZnNynHI0
+@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmYzQ1YjQ4Ni0xMTU0LTRmM2QtYTgxNy1kOWEwZGNlY2E3MTYiLCJpYXQiOjE2NjA1NzgxMzMsImV4cCI6MTY2MDU4NTMzM30.X_Y-TfKiF_-GeoEOZwiE2fgV5lLNJikPTit4JaeTLPg
 
 
 ### find many
@@ -20,8 +20,8 @@ content-type: application/json
 Authorization: Bearer {{ACCESS_TOKEN}}
 
 {
-    "customerId": "edb54b27-b7ca-4571-b984-b02efb193172",
-    "vehicleId": "f6731503-72ae-4bd3-a5c6-dd238d02e78d",
+    "customerId": "e6dca990-7f93-4bbf-9d46-3604de7dbcbd",
+    "vehicleId": "c68b5675-4224-4810-a20c-21a9c622d146",
     "from": "2022-07-13T17:58:37.493Z",
     "to": "2022-08-13T17:58:37.493Z",
     "duration": 30,
@@ -29,13 +29,13 @@ Authorization: Bearer {{ACCESS_TOKEN}}
     "additionalServiceItems": [
         {
             // Charge Battery id
-            "serviceId": "db7db4fe-b924-4659-a8bd-7861d9402cec",
+            "serviceId": "84f672d4-fec1-4efe-906d-52be2b836260",
             "quantity": 5,
             "discount": 0
         },
         {
             // Premium polish id
-            "serviceId": "8efd20d7-a06b-4484-b6e2-8d809c025e50",
+            "serviceId": "5c527983-0753-4685-9870-6b54da397c2a",
             "quantity": 5,
             "discount": 0
         }
