@@ -93,7 +93,7 @@ https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 
 - we are hardcode service for default service on `ServiceRepository`, make you not force to delete it , otherwise the basic service will not include as default :)) on booking creation
 
-````bash
+```bash
 return await this.prismaService.service.findFirst({
   where: {
     // here
@@ -118,7 +118,7 @@ to perform every action, you will need to login and have valid access token, we 
       "password": "password"
   }
 
-````
+```
 
 Response payload
 
@@ -139,7 +139,62 @@ Response payload
 
 To create a booking, make sure your database has atleast one customer record with vehicle attached, if not, you can go and create a vehicle from below endpoint or you can use from your seeded data if you want.
 
-(2.1) Create Vehicle
+(2.1) Create Customer
+
+Body
+| Name | Type | Description | Mandatory
+| --------- | ----------- | ------ | ----- |
+| firstName | String | first name | Yes
+| lastName | String | last name | Yes
+| email| String/email | valid email address | No
+| phone| String | customer phone | No
+| address | String | address | No
+
+Query => when you request post data, you can set which data you wold like to get back from server by passing `include` keys for relationship, by default relationship will not include on any request.
+
+| Name    | Type   | Description                                                                              | Mandatory |
+| ------- | ------ | ---------------------------------------------------------------------------------------- | --------- |
+| include | String | allowed relationship key are `bookings` make sure you saperate with "," for multiple key | No        |
+
+Example
+
+Request
+
+```bash
+POST {{BASE_URL}}/v1/api/customers
+    ?include=bookings
+content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "test@a.com",
+    "phone": "123456789",
+    "address": "123 Main St"
+}
+```
+
+Response
+
+```bash
+{
+  "data": {
+    "id": "ef6a5c3d-d85d-4e40-bb98-9d2d5386d508",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "test@a.com",
+    "phone": "123456789",
+    "address": "123 Main St",
+    "bookings": []
+  },
+  "message": "new customer created",
+  "statusCode": 200,
+  "success": true
+}
+```
+
+(2.2) Create Vehicle
 
 Note: before creating vehicle, make sure you have customer record, since `customerId` is mandatory. to create a new customer, please go ahead and checkout `.http/customers.http` for more details
 
@@ -150,7 +205,7 @@ Body
 | customerId | String - UUID/v4 | customer | Yes
 | description| String | vehicle descrion | No
 
-Query => when you request post data, you can set which data you wold like to get back from server by passing `include` keys for relationship, by default relationship will not include on any request.
+Query Keys
 
 | Name    | Type   | Description                                                                                       | Mandatory |
 | ------- | ------ | ------------------------------------------------------------------------------------------------- | --------- |
@@ -205,9 +260,12 @@ Response
 
 Note: For REST full `vehicles` api , you can find out more detail on `.http/vehicles.http` file
 
+(2.3) Create Service
+You can use default seeded services or create your self, to create service, please go ahead and find `.http/services.http` folder for more detail
+
 If you have ready that everything we need before create booking `one customer , one vehicle, one service`, we can now start create booking if you have , if not make sure you create it correctly.
 
-## (2) Register Booking
+(2.4) Register Booking
 
 Body
 | Name | Type | Description | Mandatory
