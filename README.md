@@ -5,7 +5,6 @@
 - [Installation and Setup](#installation-and-setup)
 - [Get Token](#get-token)
 - [Create a Booking](#create-a-booking)
-- [Register Booking](#register-booking)
 - [Generate Invoice for Booking](#generate-invoice-for-ooking)
 - [Make Payment](#make-payment)
 - [Customer REST Api](#customer-rest-api)
@@ -139,7 +138,7 @@ Response payload
 
 To create a booking, make sure your database has atleast one customer record with vehicle attached, if not, you can go and create a vehicle from below endpoint or you can use from your seeded data if you want.
 
-(2.1) Create Customer
+### (2.1) Create Customer
 
 Body
 | Name | Type | Description | Mandatory
@@ -194,7 +193,7 @@ Response
 }
 ```
 
-(2.2) Create Vehicle
+### (2.2) Create Vehicle
 
 Note: before creating vehicle, make sure you have customer record, since `customerId` is mandatory. to create a new customer, please go ahead and checkout `.http/customers.http` for more details
 
@@ -260,12 +259,13 @@ Response
 
 Note: For REST full `vehicles` api , you can find out more detail on `.http/vehicles.http` file
 
-(2.3) Create Service
+### (2.3) Create Service
+
 You can use default seeded services or create your self, to create service, please go ahead and find `.http/services.http` folder for more detail
 
 If you have ready that everything we need before create booking `one customer , one vehicle, one service`, we can now start create booking if you have , if not make sure you create it correctly.
 
-(2.4) Register Booking
+### (2.4) Register Booking
 
 Body
 | Name | Type | Description | Mandatory
