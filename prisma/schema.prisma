@@ -19,6 +19,7 @@ model User {
   createdAt DateTime       @default(now())
   updatedAt DateTime       @default(now())
   roles     UsersOnRoles[]
+  invoices  Invoice[]
 }
 
 model Customer {
@@ -33,6 +34,7 @@ model Customer {
 
   bookings Booking[]
   vehicles Vehicle[]
+  invoices Invoice[]
 }
 
 model Service {
@@ -65,7 +67,7 @@ model Booking {
   updatedAt DateTime @default(now())
 
   services ServicesOnBooking[]
-  payments Payment[]
+  invoices Invoice[]
 }
 
 model Category {
@@ -113,19 +115,39 @@ model ServicesOnBooking {
   @@id([bookingId, serviceId])
 }
 
-model Payment {
-  id     String @id @default(uuid())
-  amount Float
-  status String @default("PENDING")
+model Invoice {
+  id            String @id @default(uuid())
+  invoiceNumber String @unique @default(cuid())
+  status        String @default("PENDING")
 
-  bookingId        String
-  booking          Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  bookingId String
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  payment Payment?
+}
+
+model Payment {
+  id               String  @id @default(uuid())
+  amount           Float
+  status           String  @default("PENDING")
   customProperties Json?
   paidBy           String?
   description      String? @db.Text
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+
+  invoiceId String  @unique
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
 }
 
 model ActivityLog {
