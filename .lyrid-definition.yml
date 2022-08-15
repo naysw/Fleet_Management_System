@@ -1,0 +1,15 @@
+name: SkynetServer
+description: Skynet API Server
+ignoreFiles: .husky .vscode dist docs nginx node_modules scripts test .dockerignore .env .env.development .env.development.local .env.example .env.local .env.production .gitignore .git .npmrc .prettierrc docker-compose.prod.yml docker-compose.yml Procfile README.md skynet.drawio
+modules:
+  - name: container
+    language: docker
+    description: Module description
+    container:
+    volumes:
+    ports:
+      - alias: "http"
+        port: 80
+    functions:
+      - name: entry
+        description: the entry point for the function

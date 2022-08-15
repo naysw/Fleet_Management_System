@@ -2,12 +2,13 @@
 @API_VERSION=v1
 @MODEL=vehicles
 
-@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNjFkZGViMC04MWE5LTRhMmMtODQ2MC01YTk5N2QwZjk3ZTQiLCJpYXQiOjE2NjA1NTE2MTQsImV4cCI6MTY2MDU1ODgxNH0.NV5JoGefd-kroUjfCux6AmGeFrPHZ8gtGS4UPKsN16A
+@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNTNjYmRmMy1jMThlLTQzMjUtYmI3My1jMDgyMTBhNmRlN2YiLCJpYXQiOjE2NjA1NTg3ODMsImV4cCI6MTY2MDU2NTk4M30.3bMvBTcp2HNJV1Ghtjr0Det-8QN_xnefaCfy-RSt5w0
 
 ### find many
 GET {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
     ?take=1&skip=0&include=category,customer&orderBy=createdAt
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 
 
@@ -19,16 +20,17 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 
 {
     "plateNumber": "7A-123-456",
-    "customerId": "f927f9df-1a8f-4ab4-8843-a8fa853615f4",
+    "customerId": "edb54b27-b7ca-4571-b984-b02efb193172",
     "description": "New Vehicle Description"
 }
 
 
 
 ### update model from given id
-PATCH {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/309ce3d0-19a0-41f3-b252-2662b2a634f0
+PATCH {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/885e36ec-9646-4055-b576-e3b9ac423253
     ?include=category,customer   
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 {
     "plateNumber": "7A-123-456",
@@ -37,5 +39,6 @@ content-type: application/json
 
 
 ### delete model from given id
-DELETE  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/cfe06366-d1d2-4e20-8dd4-ab65db9aa281
+DELETE  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/885e36ec-9646-4055-b576-e3b9ac423253
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}

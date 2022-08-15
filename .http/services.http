@@ -3,10 +3,13 @@
 
 @MODEL=services
 
+@ACCESS_TOKEN=
+
 ### find many model
 GET {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
     ?take=1&skip=0&include=bookings&orderBy=createdAt
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 
 

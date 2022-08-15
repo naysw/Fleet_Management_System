@@ -1,8 +1,12 @@
 {
-  "name": "hive_innovation_fleet_management",
+  "name": "@naysoewin/fleet_management",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": {
+    "name": "Nay Soewin",
+    "email": "naysoewin9@gmail.com",
+    "url": "https://github.com/naysw"
+  },
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -12,7 +16,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "NODE_ENV=production node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -27,6 +31,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
@@ -95,5 +100,9 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
   }
 }

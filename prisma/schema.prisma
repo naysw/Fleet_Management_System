@@ -96,8 +96,8 @@ model Vehicle {
   id          String    @id @default(uuid())
   plateNumber String
   categoryId  String?
-  category    Category? @relation(fields: [categoryId], references: [id])
-  customer    Customer  @relation(fields: [customerId], references: [id])
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customer    Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   customerId  String
   mediaId     String?
   description String?   @db.Text

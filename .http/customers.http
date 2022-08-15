@@ -3,10 +3,13 @@
 
 @MODEL=customers
 
+@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNTNjYmRmMy1jMThlLTQzMjUtYmI3My1jMDgyMTBhNmRlN2YiLCJpYXQiOjE2NjA1NjUzNjcsImV4cCI6MTY2MDU3MjU2N30.lHcC42pffgQPO1cgyZtRwHR1FRP5AuAnyihaxEFuLko
+
 ### find many
 GET {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
-    ?take=5&skip=0&include=bookings&orderBy=createdAt
+    ?take=2&skip=0&include=bookings&orderBy=createdAt
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 
 
@@ -14,6 +17,7 @@ content-type: application/json
 POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
     ?include=bookings    
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 {
     "firstName": "John",
@@ -26,9 +30,10 @@ content-type: application/json
 
 
 ### update model from given id
-PATCH {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/76d038e4-698a-4a92-bf78-d04d5add6bec
+PATCH {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/edb54b27-b7ca-4571-b984-b02efb193172
     ?include=bookings    
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 {
     "firstName": "John Update",
@@ -39,5 +44,6 @@ content-type: application/json
 
 
 ### delete model from given id
-DELETE  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/f202a506-f91b-4e1b-bf77-88fad711e96d  
+DELETE  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/3091f188-2e9d-40d2-a30d-e6cc840f91f5
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}

@@ -2,13 +2,13 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { Booking, Customer } from '@prisma/client';
-import { CreateCustomerBodyInput } from '../input/CreateCustomerBodyInput';
-import { FindManyCustomerQueryInput } from '../input/FindManyCustomerQueryInput';
-import { FindOneCustomerQueryInput } from '../input/FindOneCustomerQueryInput';
-import { UpdateCustomerBodyInput } from '../input/UpdateCustomerBodyInput';
-import { CustomerRepository } from '../repositories/CustomerRepository';
+} from "@nestjs/common";
+import { Booking, Customer } from "@prisma/client";
+import { CreateCustomerBodyInput } from "../input/CreateCustomerBodyInput";
+import { FindManyCustomerQueryInput } from "../input/FindManyCustomerQueryInput";
+import { FindOneCustomerQueryInput } from "../input/FindOneCustomerQueryInput";
+import { UpdateCustomerBodyInput } from "../input/UpdateCustomerBodyInput";
+import { CustomerRepository } from "../repositories/CustomerRepository";
 
 @Injectable()
 export class CustomerService {
@@ -51,7 +51,7 @@ export class CustomerService {
     { firstName, lastName, email, phone, address }: CreateCustomerBodyInput,
     { include }: FindOneCustomerQueryInput,
   ): Promise<any> {
-    const customer = await this.customerRepository.createCustomer(
+    const customer = await this.customerRepository.create(
       {
         firstName,
         lastName,
@@ -94,7 +94,7 @@ export class CustomerService {
     if (!customer)
       throw new NotFoundException(`customer with id ${id} not found`);
 
-    return customer;
+    return this.customerResource(customer);
   }
 
   /**
@@ -105,12 +105,12 @@ export class CustomerService {
    * @param param2 FindOneCustomerQueryInput
    * @returns Promise<Customer>
    */
-  async updateCustomer(
+  async update(
     id: string,
     { firstName, lastName, email, phone, address }: UpdateCustomerBodyInput,
     { include }: FindOneCustomerQueryInput,
   ) {
-    const customer = await this.customerRepository.updateCustomer(
+    const customer = await this.customerRepository.update(
       id,
       { firstName, lastName, email, phone, address },
       { include },
@@ -124,8 +124,8 @@ export class CustomerService {
    *
    * @param id string
    */
-  async deleteCustomer(id: string): Promise<void> {
-    await this.customerRepository.deleteCustomer(id);
+  async delete(id: string): Promise<void> {
+    await this.customerRepository.delete(id);
   }
 
   /**

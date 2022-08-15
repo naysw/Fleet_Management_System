@@ -1,11 +1,11 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { DEFAULT_TAKE, IS_DEV } from 'src/config/constants';
-import { PrismaService } from 'src/services/PrismaService';
-import { registerInclude, registerOrderBy } from 'src/utils/queryBuilder';
-import { CreateCustomerBodyInput } from '../input/CreateCustomerBodyInput';
-import { FindManyCustomerQueryInput } from '../input/FindManyCustomerQueryInput';
-import { FindOneCustomerQueryInput } from '../input/FindOneCustomerQueryInput';
-import { UpdateCustomerBodyInput } from '../input/UpdateCustomerBodyInput';
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { DEFAULT_TAKE, IS_DEV } from "src/config/constants";
+import { PrismaService } from "src/services/PrismaService";
+import { registerInclude, registerOrderBy } from "src/utils/queryBuilder";
+import { CreateCustomerBodyInput } from "../input/CreateCustomerBodyInput";
+import { FindManyCustomerQueryInput } from "../input/FindManyCustomerQueryInput";
+import { FindOneCustomerQueryInput } from "../input/FindOneCustomerQueryInput";
+import { UpdateCustomerBodyInput } from "../input/UpdateCustomerBodyInput";
 
 @Injectable()
 export class CustomerRepository {
@@ -29,7 +29,7 @@ export class CustomerRepository {
     try {
       return await this.prismaService.customer.findMany({
         include: {
-          bookings: registerInclude(include, 'bookings'),
+          bookings: registerInclude(include, "bookings"),
         },
         skip: Number(skip) || undefined,
         take: Number(take) || DEFAULT_TAKE,
@@ -37,7 +37,7 @@ export class CustomerRepository {
       });
     } catch (error) {
       throw new InternalServerErrorException(
-        IS_DEV ? error : 'findMany customers error',
+        IS_DEV ? error : "findMany customers error",
       );
     }
   }
@@ -48,7 +48,7 @@ export class CustomerRepository {
    * @param param0 CreateCustomerBodyInput
    * @returns
    */
-  async createCustomer(
+  async create(
     { firstName, lastName, email, phone, address }: CreateCustomerBodyInput,
     { include }: FindOneCustomerQueryInput,
   ) {
@@ -62,12 +62,12 @@ export class CustomerRepository {
           address,
         },
         include: {
-          bookings: registerInclude(include, 'bookings'),
+          bookings: registerInclude(include, "bookings"),
         },
       });
     } catch (error) {
       throw new InternalServerErrorException(
-        IS_DEV ? error : 'create customer error',
+        IS_DEV ? error : "create customer error",
       );
     }
   }
@@ -84,10 +84,13 @@ export class CustomerRepository {
         where: {
           email,
         },
+        include: {
+          bookings: true,
+        },
       });
     } catch (error) {
       throw new InternalServerErrorException(
-        IS_DEV ? error : 'findOrFailByEmail error',
+        IS_DEV ? error : "findOrFailByEmail error",
       );
     }
   }
@@ -104,9 +107,12 @@ export class CustomerRepository {
         where: {
           id,
         },
+        include: {
+          bookings: true,
+        },
       });
     } catch (error) {
-      throw new InternalServerErrorException(IS_DEV ? error : 'findById error');
+      throw new InternalServerErrorException(IS_DEV ? error : "findById error");
     }
   }
 
@@ -118,7 +124,7 @@ export class CustomerRepository {
    * @param param2 FindOneCustomerQueryInput
    * @returns Promise<Customer>
    */
-  async updateCustomer(
+  async update(
     id: string,
     { firstName, lastName, email, phone, address }: UpdateCustomerBodyInput,
     { include }: FindOneCustomerQueryInput,
@@ -136,12 +142,12 @@ export class CustomerRepository {
           address,
         },
         include: {
-          bookings: registerInclude(include, 'bookings'),
+          bookings: registerInclude(include, "bookings"),
         },
       });
     } catch (error) {
       throw new InternalServerErrorException(
-        IS_DEV ? error : 'update customer error',
+        IS_DEV ? error : "update customer error",
       );
     }
   }
@@ -152,7 +158,7 @@ export class CustomerRepository {
    * @param id string
    * @returns
    */
-  async deleteCustomer(id: string) {
+  async delete(id: string) {
     try {
       return await this.prismaService.customer.delete({
         where: {
@@ -161,7 +167,7 @@ export class CustomerRepository {
       });
     } catch (error) {
       throw new InternalServerErrorException(
-        IS_DEV ? error : 'delete customer error',
+        IS_DEV ? error : "delete customer error",
       );
     }
   }

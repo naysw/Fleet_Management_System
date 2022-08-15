@@ -11,6 +11,7 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { JoiValidationPipe } from "src/pipe/JoiValidationPipe";
 import { ResponseResource } from "src/resources/ResponseResource";
+import { ActivityLogService } from "src/services/ActivityLogService";
 import { UserService } from "../../users/services/UserService";
 import { LoginInput, loginInputSchema } from "../input/LoginInput";
 
@@ -22,6 +23,7 @@ export class LoginController {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly activityLogService: ActivityLogService,
   ) {}
 
   /**
@@ -44,8 +46,15 @@ export class LoginController {
 
     const validPassword = await bcrypt.compare(password, user.password);
 
-    if (!validPassword)
+    if (!validPassword) {
+      await this.activityLogService.createOne({
+        description: `Login fail with ${username}, invalid password`,
+        causerId: String(user.id) || undefined,
+        causerType: "User",
+      });
+
       throw new UnauthorizedException("Username or password is incorrect");
+    }
 
     const token = await this.jwtService.signAsync({ sub: user.id });
 

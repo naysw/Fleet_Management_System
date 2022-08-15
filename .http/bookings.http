@@ -48,6 +48,7 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 PATCH {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/76d038e4-698a-4a92-bf78-d04d5add6bec
     ?include=bookings    
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 {
     "firstName": "John Update",

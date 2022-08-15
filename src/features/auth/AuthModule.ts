@@ -1,6 +1,8 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
+import { ActivityLogRepository } from "src/repositories/ActivityLogRepository";
+import { ActivityLogService } from "src/services/ActivityLogService";
 import { UserModule } from "../users/UserModule";
 import { ACCESS_TOKEN_SECRET, TOKEN_EXPIRES_IN } from "./config/auth";
 import { LoginController } from "./controllers/LoginController";
@@ -18,6 +20,6 @@ import { JwtStrategy } from "./JwtStrategy";
     UserModule,
   ],
   controllers: [LoginController],
-  providers: [JwtStrategy],
+  providers: [JwtStrategy, ActivityLogService, ActivityLogRepository],
 })
 export class AuthModule {}

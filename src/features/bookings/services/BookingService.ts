@@ -77,7 +77,7 @@ export class BookingService {
    * @param serviceIds string[]
    * @returns string[]
    */
-  getServiceIds(serviceIds: string[]): string[] {
+  public getServiceIds(serviceIds: string[]): string[] {
     const hasLength = serviceIds && serviceIds.length > 0;
 
     return hasLength ? [...new Set(serviceIds)] : [];

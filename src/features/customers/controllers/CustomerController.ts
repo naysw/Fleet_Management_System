@@ -8,9 +8,11 @@ import {
   Patch,
   Post,
   Query,
+  UnprocessableEntityException,
   UseGuards,
 } from "@nestjs/common";
 import { Customer } from "@prisma/client";
+import { AdminGuard } from "src/features/auth/guards/AdminGuard";
 import { JwtAuthGuard } from "src/features/auth/guards/JwtAuthGuard";
 import { JoiValidationPipe } from "src/pipe/JoiValidationPipe";
 import { ResponseResource } from "src/resources/ResponseResource";
@@ -79,6 +81,7 @@ export class CustomerController {
    * @returns Promise<ResponseResource<Customer>>
    */
   @Post()
+  @UseGuards(AdminGuard)
   async createCustomer(
     @Body(new JoiValidationPipe(createCustomerBodyInputSchema))
     { firstName, lastName, email, phone, address }: CreateCustomerBodyInput,
@@ -109,6 +112,7 @@ export class CustomerController {
    * @param param1 UpdaeCustomerBodyInput
    */
   @Patch(":id")
+  @UseGuards(AdminGuard)
   async updateCustomer(
     @Param("id", new ParseUUIDPipe()) id: string,
     @Body(new JoiValidationPipe(updateCustomerBodyInputSchema))
@@ -118,7 +122,7 @@ export class CustomerController {
   ): Promise<ResponseResource<any>> {
     await this.customerService.findOrFailById(id);
 
-    const customer = await this.customerService.updateCustomer(
+    const customer = await this.customerService.update(
       id,
       { firstName, lastName, email, phone, address },
       { include },
@@ -134,12 +138,19 @@ export class CustomerController {
    * @returns
    */
   @Delete(":id")
+  @UseGuards(AdminGuard)
   async deleteCustomer(
     @Param("id", new ParseUUIDPipe()) id: string,
   ): Promise<ResponseResource<any>> {
-    await this.customerService.findOrFailById(id);
+    const customer = await this.customerService.findOrFailById(id);
 
-    await this.customerService.deleteCustomer(id);
+    if (customer.bookings && customer.bookings.length) {
+      throw new UnprocessableEntityException(
+        `Sorry, customer with ${id} is not allowed to deleted`,
+      );
+    }
+
+    await this.customerService.delete(id);
 
     return new ResponseResource(null).setMessage(`customer with ${id} deleted`);
   }
