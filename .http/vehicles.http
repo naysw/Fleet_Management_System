@@ -2,6 +2,8 @@
 @API_VERSION=v1
 @MODEL=vehicles
 
+@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNjFkZGViMC04MWE5LTRhMmMtODQ2MC01YTk5N2QwZjk3ZTQiLCJpYXQiOjE2NjA1NTE2MTQsImV4cCI6MTY2MDU1ODgxNH0.NV5JoGefd-kroUjfCux6AmGeFrPHZ8gtGS4UPKsN16A
+
 ### find many
 GET {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}
     ?take=1&skip=0&include=category,customer&orderBy=createdAt
@@ -13,10 +15,11 @@ content-type: application/json
 POST {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}  
     ?include=category,customer
 content-type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
 {
     "plateNumber": "7A-123-456",
-    "customerId": "270c3d5e-d034-4529-8f66-f2bec135ad24",
+    "customerId": "f927f9df-1a8f-4ab4-8843-a8fa853615f4",
     "description": "New Vehicle Description"
 }
 

@@ -17,7 +17,7 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 }
 
 ### pay invoice
-PATCH  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/cbeff71a-e3d3-4f39-9eed-e3b56016a5ad/pay
+PATCH  {{BASE_URL}}/{{API_VERSION}}/api/{{MODEL}}/d947aa89-02cb-4291-80ca-73c8e72b2914/pay
     ?include=customer,booking,payment
 content-type: application/json
 Authorization: Bearer {{ACCESS_TOKEN}}
