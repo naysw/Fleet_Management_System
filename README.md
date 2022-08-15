@@ -89,6 +89,19 @@ https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 - when you build with `docker` and use same container network , make sure your you setup your datbase correctly
 - if you would like to use your application on production, make sure you setup email server correctly, otherwise `nodemailer` will use random generated test email.
 
+### Others Notes
+
+- we are hardcode service for default service on `ServiceRepository`, make you not force to delete it , otherwise the basic service will not include as default :)) on booking creation
+
+````bash
+return await this.prismaService.service.findFirst({
+  where: {
+    // here
+    name: "Basic",
+  },
+});
+```
+
 ## (1) Get Token
 
 to perform every action, you will need to login and have valid access token, we are using `jwt` token
@@ -105,6 +118,12 @@ to perform every action, you will need to login and have valid access token, we 
       "password": "password"
   }
 
+````
+
+Response payload
+
+```bash
+
   // response
   {
   "data": {
@@ -120,7 +139,9 @@ to perform every action, you will need to login and have valid access token, we 
 
 To create a booking, make sure your database has atleast one customer record with vehicle attached, if not, you can go and create a vehicle from below endpoint or you can use from your seeded data if you want.
 
-(2.1) Create Vehicle API
+(2.1) Create Vehicle
+
+Note: before creating vehicle, make sure you have customer record, since `customerId` is mandatory. to create a new customer, please go ahead and checkout `.http/customers.http` for more details
 
 Body
 | Name | Type | Description | Mandatory
@@ -129,11 +150,11 @@ Body
 | customerId | String - UUID/v4 | customer | Yes
 | description| String | vehicle descrion | No
 
-Query => when you request post data, you can set which data you wold like to getback using `include` for relationship, by default relationship will not include on any request.
+Query => when you request post data, you can set which data you wold like to get back from server by passing `include` keys for relationship, by default relationship will not include on any request.
 
-| Name    | Type   | Description                                                                               | Mandatory |
-| ------- | ------ | ----------------------------------------------------------------------------------------- | --------- |
-| include | String | relationship key are `category,customer` make sure you saperate with "," for multiple key | No        |
+| Name    | Type   | Description                                                                                       | Mandatory |
+| ------- | ------ | ------------------------------------------------------------------------------------------------- | --------- |
+| include | String | allowed relationship key are `category,customer` make sure you saperate with "," for multiple key | No        |
 
 Example
 
@@ -184,7 +205,7 @@ Response
 
 Note: For REST full `vehicles` api , you can find out more detail on `.http/vehicles.http` file
 
-In the next step, we can not start create booking if you have `one customer , one vehicle, one service`, if not make sure you create it correctly.
+If you have ready that everything we need before create booking `one customer , one vehicle, one service`, we can now start create booking if you have , if not make sure you create it correctly.
 
 ## (2) Register Booking
 
