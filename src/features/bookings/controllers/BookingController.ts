@@ -41,6 +41,12 @@ export class BookingController {
     private readonly serviceService: ServiceService,
   ) {}
 
+  /**
+   * find many booking
+   *
+   * @param param0 FindOneBookingQueryInput
+   * @returns string
+   */
   @Get()
   async findMany(
     @Query(new JoiValidationPipe(findManyBookingQueryInputSchema))
@@ -49,6 +55,13 @@ export class BookingController {
     return "This action returns all bookings";
   }
 
+  /**
+   * create one booking from given input data
+   *
+   * @param param0 CreateBookingBodyInput
+   * @param param1 FindOneBookingQueryInput
+   * @returns Promise<ResponseResource<Bookding>>
+   */
   @Post()
   async createBooking(
     @Body(new JoiValidationPipe(createBookingBodyInputSchema))
@@ -64,7 +77,7 @@ export class BookingController {
     }: CreateBookingBodyInput,
     @Query(new JoiValidationPipe(findOneBookingQueryInputSchema))
     { include }: FindOneBookingQueryInput,
-  ) {
+  ): Promise<ResponseResource<any>> {
     /**
      * validate incoming customerId is whether exist or not
      */
@@ -107,7 +120,7 @@ export class BookingController {
     };
 
     const addSItems = hasAdditionalServiceItems
-      ? [...additionalServiceItems, basicItem]
+      ? [basicItem, ...additionalServiceItems]
       : [basicItem];
 
     console.log(addSItems);

@@ -48,7 +48,7 @@ CREATE TABLE `Booking` (
     `to` VARCHAR(191) NULL,
     `duration` INTEGER NOT NULL DEFAULT 1,
     `notes` TEXT NOT NULL,
-    `status` VARCHAR(191) NULL,
+    `status` VARCHAR(191) NULL DEFAULT 'ONGOING',
     `vehicleId` VARCHAR(191) NOT NULL,
     `parkingSlotId` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -68,7 +68,6 @@ CREATE TABLE `AdditionalServiceItem` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    UNIQUE INDEX `AdditionalServiceItem_bookingId_key`(`bookingId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

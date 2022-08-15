@@ -3,7 +3,7 @@
 
 @MODEL=bookings
 
-@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNjFkZGViMC04MWE5LTRhMmMtODQ2MC01YTk5N2QwZjk3ZTQiLCJpYXQiOjE2NjA1NTE2MTQsImV4cCI6MTY2MDU1ODgxNH0.NV5JoGefd-kroUjfCux6AmGeFrPHZ8gtGS4UPKsN16A
+@ACCESS_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNTNjYmRmMy1jMThlLTQzMjUtYmI3My1jMDgyMTBhNmRlN2YiLCJpYXQiOjE2NjA1NTY0MTUsImV4cCI6MTY2MDU2MzYxNX0.yDGyG2Ej-2njAF-vA83x3akFe3aIpSy9sEDMJkOclTE
 
 
 ### find many
@@ -20,18 +20,25 @@ content-type: application/json
 Authorization: Bearer {{ACCESS_TOKEN}}
 
 {
-    "customerId": "f927f9df-1a8f-4ab4-8843-a8fa853615f4",
-    "vehicleId": "fd908d14-7b83-49de-bfec-874348283ef7",
+    "customerId": "edb54b27-b7ca-4571-b984-b02efb193172",
+    "vehicleId": "f6731503-72ae-4bd3-a5c6-dd238d02e78d",
     "from": "2022-07-13T17:58:37.493Z",
     "to": "2022-08-13T17:58:37.493Z",
     "duration": 30,
     "notes": "Do not forget to bring your keys",
     "additionalServiceItems": [
-        # {
-        #     "serviceId": "ff4636a6-c80e-4094-8d38-c0e3682f71a5",
-        #     "quantity": 5,
-        #     "discount": 0
-        # }
+        {
+            // Charge Battery id
+            "serviceId": "db7db4fe-b924-4659-a8bd-7861d9402cec",
+            "quantity": 5,
+            "discount": 0
+        },
+        {
+            // Premium polish id
+            "serviceId": "8efd20d7-a06b-4484-b6e2-8d809c025e50",
+            "quantity": 5,
+            "discount": 0
+        }
     ]
 }
 
